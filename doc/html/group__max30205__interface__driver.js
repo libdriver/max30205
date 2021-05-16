@@ -1,0 +1,9 @@
+var group__max30205__interface__driver =
+[
+    [ "max30205_interface_debug_print", "group__max30205__interface__driver.html#ga2e81421114ed657ea326f0d30a35644c", null ],
+    [ "max30205_interface_delay_ms", "group__max30205__interface__driver.html#ga41f38d0269dbb3427acdbd0ad3fbf765", null ],
+    [ "max30205_interface_iic_deinit", "group__max30205__interface__driver.html#ga87b7c94132cb3c9481fcb23cf91ac0ad", null ],
+    [ "max30205_interface_iic_init", "group__max30205__interface__driver.html#gaac2f43f9af71667e29265f0162e6149a", null ],
+    [ "max30205_interface_iic_read", "group__max30205__interface__driver.html#gae0bc37d8f03473d076b11a4583172730", null ],
+    [ "max30205_interface_iic_write", "group__max30205__interface__driver.html#ga9e9a9a3e7549d134488a42526b7263b3", null ]
+];
