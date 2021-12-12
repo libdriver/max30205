@@ -4,7 +4,7 @@
 
 ## LibDriver MAX30205
 
-[English](/README.md) | [ 简体中文](/README_CN.md)
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
 
 The MAX30205 temperature sensor accurately measures temperature and provide an over temperature alarm/
 interrupt/shutdown output. This device converts the temperature measurements to digital form using a high resolution,
@@ -194,7 +194,7 @@ Please sent an e-mail to lishifenging@outlook.com
 
 ### License
 
-Copyright (C) LibDriver 2015-2021 All rights reserved 
+Copyright (c) 2015 - present LibDriver All rights reserved
 
 
 
