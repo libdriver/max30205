@@ -1,10 +1,12 @@
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+
 <div align=center>
 <img src="/doc/image/logo.png"/>
 </div>
 
 ## LibDriver MAX30205
 
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/max30205/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 MAX30205温度传感器可高精度测量温度，提供过热报警/中断/关断输出。器件利用高分辨率、Σ-Δ、模/数转换器(ADC)将温度测量值转换为数字形式。焊接到最终PCB上时，精度满足ASTM E1112的临床测温仪技术规范。通过I2C兼容2线串行接口进行通信。I2C串行接口支持标准写字节、读字节、发送字节和接收字节命令，以读取温度数据以及配置开漏过热关断输出模式。MAX30205具有三条地址选择线，提供总共32个可用地址。传感器采用2.7V至3.3V供电电压范围、600µA低供电电流、锁定保护I2C兼容接口，使其可理想用于可穿戴健身和医疗应用。器件采用8引脚TDFN封装，工作在0°C至+50°C温度范围。MAX30205被用于健身和医疗等。
 

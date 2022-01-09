@@ -1,10 +1,12 @@
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+
 <div align=center>
 <img src="/doc/image/logo.png"/>
 </div>
 
 ## LibDriver MAX30205
 
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/max30205/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 MAX30205溫度傳感器可高精度測量溫度，提供過熱報警/中斷/關斷輸出。器件利用高分辨率、Σ-Δ、模/數轉換器(ADC)將溫度測量值轉換為數字形式。焊接到最終PCB上時，精度滿足ASTM E1112的臨床測溫儀技術規範。通過I2C兼容2線串行接口進行通信。 I2C串行接口支持標準寫字節、讀字節、發送字節和接收字節命令，以讀取溫度數據以及配置開漏過熱關斷輸出模式。 MAX30205具有三條地址選擇線，提供總共32個可用地址。傳感器採用2.7V至3.3V供電電壓範圍、600µA低供電電流、鎖定保護I2C兼容接口，使其可理想用於可穿戴健身和醫療應用。器件採用8引腳TDFN封裝，工作在0°C至+50°C溫度範圍。 MAX30205被用於健身和醫療等。
 
