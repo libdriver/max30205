@@ -159,7 +159,7 @@ uint8_t max30205(uint8_t argc, char **argv)
             /* reg test */
             if (strcmp("reg", argv[2]) == 0)
             {
-                volatile uint8_t addr;
+                uint8_t addr;
                 
                 /* check iic address */
                 if (strcmp("-a", argv[3]) != 0)
@@ -319,7 +319,7 @@ uint8_t max30205(uint8_t argc, char **argv)
                     return 5;
                 }
                 /* run reg test */
-                if (max30205_register_test((max30205_address_t)(addr)))
+                if (max30205_register_test((max30205_address_t)(addr)) != 0)
                 {
                     return 1;
                 }
@@ -348,7 +348,7 @@ uint8_t max30205(uint8_t argc, char **argv)
             /* read test */
             if (strcmp("read", argv[2]) == 0)
             {
-                volatile uint8_t addr;
+                uint8_t addr;
                 
                 /* check iic address */
                 if (strcmp("-a", argv[4]) != 0)
@@ -508,7 +508,7 @@ uint8_t max30205(uint8_t argc, char **argv)
                     return 5;
                 }
                 /* run read test */
-                if (max30205_read_test((max30205_address_t)(addr), atoi(argv[3])))
+                if (max30205_read_test((max30205_address_t)(addr), atoi(argv[3])) != 0)
                 {
                     return 1;
                 }
@@ -529,11 +529,11 @@ uint8_t max30205(uint8_t argc, char **argv)
              /* read function */
             if (strcmp("read", argv[2]) == 0)
             {
-                volatile uint8_t res;
-                volatile uint32_t times;
-                volatile uint32_t i;
-                volatile uint8_t addr;
-                volatile float s;
+                uint8_t res;
+                uint32_t times;
+                uint32_t i;
+                uint8_t addr;
+                float s;
                 
                 /* check iic address */
                 if (strcmp("-a", argv[4]) != 0)
@@ -694,36 +694,36 @@ uint8_t max30205(uint8_t argc, char **argv)
                 }
                 
                 res = max30205_basic_init((max30205_address_t)(addr));
-                if (res)
+                if (res != 0)
                 {
                     return 1;
                 }
                 times = atoi(argv[3]);
-                for (i=0; i<times; i++)
+                for (i = 0; i < times; i++)
                 {
                     max30205_interface_delay_ms(1000);
                     res = max30205_basic_read((float *)&s);
-                    if (res)
+                    if (res != 0)
                     {
-                        max30205_basic_deinit();
+                        (void)max30205_basic_deinit();
                         
                         return 1;
                     }
                     max30205_interface_debug_print("max30205: %d/%d.\n", (uint32_t)(i+1), (uint32_t)times);
                     max30205_interface_debug_print("max30205: temperature is %0.3fC.\n", s);
                 }
-                max30205_basic_deinit();
+                (void)max30205_basic_deinit();
                 
                 return 0;
             }
             /* shot function */
             else if (strcmp("shot", argv[2]) == 0)
             {
-                volatile uint8_t res;
-                volatile uint32_t times;
-                volatile uint32_t i;
-                volatile uint8_t addr;
-                volatile float s;
+                uint8_t res;
+                uint32_t times;
+                uint32_t i;
+                uint8_t addr;
+                float s;
                 
                 /* check iic address */
                 if (strcmp("-a", argv[4]) != 0)
@@ -884,25 +884,25 @@ uint8_t max30205(uint8_t argc, char **argv)
                 }
                 
                 res = max30205_shot_init((max30205_address_t)(addr));
-                if (res)
+                if (res != 0)
                 {
                     return 1;
                 }
                 times = atoi(argv[3]);
-                for (i=0; i<times; i++)
+                for (i = 0; i < times; i++)
                 {
                     max30205_interface_delay_ms(1000);
                     res = max30205_shot_read((float *)&s);
-                    if (res)
+                    if (res != 0)
                     {
-                        max30205_shot_deinit();
+                        (void)max30205_shot_deinit();
                         
                         return 1;
                     }
                     max30205_interface_debug_print("max30205: %d/%d.\n", (uint32_t)(i+1), (uint32_t)times);
                     max30205_interface_debug_print("max30205: temperature is %0.3fC.\n", s);
                 }
-                max30205_shot_deinit();
+                (void)max30205_shot_deinit();
                 
                 return 0;
             }
@@ -926,10 +926,9 @@ uint8_t max30205(uint8_t argc, char **argv)
             /* int test */
             if (strcmp("int", argv[2]) == 0)
             {
-                volatile uint8_t res;
-                volatile uint32_t times;
-                volatile uint8_t addr;
-                volatile float s;
+                uint8_t res;
+                uint32_t times;
+                uint8_t addr;
                 max30205_interrupt_mode_t mode;
                 
                 /* check iic address */
@@ -1113,18 +1112,18 @@ uint8_t max30205(uint8_t argc, char **argv)
                 }
                 times = atoi(argv[3]);
                 res = gpio_interrupt_init();
-                if (res)
+                if (res != 0)
                 {
                     return 1;
                 }
                 res = max30205_interrupt_test((max30205_address_t)(addr), mode, (float)atof(argv[9]),(float)atof(argv[10]), times);
-                if (res)
+                if (res != 0)
                 {
-                    gpio_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     
                     return 1;
                 }
-                gpio_interrupt_deinit();
+                (void)gpio_interrupt_deinit();
                 
                 return 0;
             }
@@ -1140,11 +1139,11 @@ uint8_t max30205(uint8_t argc, char **argv)
             /* int function */
             if (strcmp("int", argv[2]) == 0)
             {
-                volatile uint8_t res;
-                volatile uint32_t times;
-                volatile uint32_t i;
-                volatile uint8_t addr;
-                volatile float s;
+                uint8_t res;
+                uint32_t times;
+                uint32_t i;
+                uint8_t addr;
+                float s;
                 max30205_interrupt_mode_t mode;
                 
                 /* check iic address */
@@ -1328,30 +1327,30 @@ uint8_t max30205(uint8_t argc, char **argv)
                 }
                 times = atoi(argv[3]);
                 res = gpio_interrupt_init();
-                if (res)
+                if (res != 0)
                 {
                     return 1;
                 }
                 res = max30205_interrupt_init((max30205_address_t)(addr), mode, (float)atof(argv[9]),(float)atof(argv[10]));
-                if (res)
+                if (res != 0)
                 {
-                    gpio_interrupt_deinit();
+                    (void)gpio_interrupt_deinit();
                     
                     return 1;
                 }
                 g_flag = 0;
-                for (i=0; i<times; i++)
+                for (i = 0; i < times; i++)
                 {
                     max30205_interface_delay_ms(1000);
                     res = max30205_interrupt_read((float *)&s); 
-                    if (res)
+                    if (res != 0)
                     {
-                        gpio_interrupt_deinit();
-                        max30205_interrupt_deinit();
+                        (void)gpio_interrupt_deinit();
+                        (void)max30205_interrupt_deinit();
                         
                         return 1;
                     }
-                    if (g_flag)
+                    if (g_flag != 0)
                     {
                         max30205_interface_debug_print("max30205: find interrupt.\n");
                         
@@ -1360,8 +1359,8 @@ uint8_t max30205(uint8_t argc, char **argv)
                     max30205_interface_debug_print("max30205: %d/%d.\n", (uint32_t)(i+1), (uint32_t)times);
                     max30205_interface_debug_print("max30205: temperature is %0.3fC.\n", s);
                 }
-                gpio_interrupt_deinit();
-                max30205_interrupt_deinit();
+                (void)gpio_interrupt_deinit();
+                (void)max30205_interrupt_deinit();
                 
                 return 0;
             }
@@ -1390,7 +1389,7 @@ uint8_t max30205(uint8_t argc, char **argv)
  */
 int main(void)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     /* stm32f407 clock init and hal init */
     clock_init();

@@ -1,4 +1,4 @@
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md) | [日本語](/README_ja.md) | [Deutsch](/README_de.md) | [한국어](/README_ko.md)
 
 <div align=center>
 <img src="/doc/image/logo.png"/>
@@ -6,13 +6,11 @@
 
 ## LibDriver MAX30205
 
-[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/max30205/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
+[![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/max30205/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
-The MAX30205 temperature sensor accurately measures temperature and provide an over temperature alarm/
-interrupt/shutdown output. This device converts the temperature measurements to digital form using a high resolution,
-sigma-delta, analog-to-digital converter (ADC).Accuracy meets clinical thermometry specification of the ASTM E1112 when soldered on the final PCB. Communication is through an I2C-compatible, 2-wire serial interface. The I2C serial interface accepts standard write byte, read byte, send byte, and receive byte commands to read the temperature data and configure the behavior of the open drain over temperature shutdown output. The MAX30205 features three address select lines with a total of 32 available addresses. The sensor has a 2.7V to 3.3V supply voltage range, low 600μA supply current, and a lockup-protected I2C-compatible interface that make it ideal for wearable fitness and medical applications. This device is available in an 8-pin TDFN package and operates over the 0NC to +50NC temperature range. MAX30205 is used in fitness and medical treatment.
+The MAX30205 temperature sensor accurately measures temperature and provide an over temperature alarm/interrupt/shutdown output. This device converts the temperature measurements to digital form using a high resolution, sigma-delta, analog-to-digital converter (ADC).Accuracy meets clinical thermometry specification of the ASTM E1112 when soldered on the final PCB. Communication is through an I2C-compatible, 2-wire serial interface. The I2C serial interface accepts standard write byte, read byte, send byte, and receive byte commands to read the temperature data and configure the behavior of the open drain over temperature shutdown output. The MAX30205 features three address select lines with a total of 32 available addresses. The sensor has a 2.7V to 3.3V supply voltage range, low 600μA supply current, and a lockup-protected I2C-compatible interface that make it ideal for wearable fitness and medical applications. This device is available in an 8-pin TDFN package and operates over the 0NC to +50NC temperature range. MAX30205 is used in fitness and medical treatment.
 
-LibDriver MAX30205 is the full function driver of MAX30205 launched by LibDriver. It provides continuous temperature reading, single temperature reading and temperature interrupt functions.
+LibDriver MAX30205 is the full function driver of MAX30205 launched by LibDriver. It provides continuous temperature reading, single temperature reading and temperature interrupt functions. LibDriver is MISRA compliant.
 
 ### Table of Contents
 
@@ -59,7 +57,7 @@ uint8_t i;
 float s;
 
 res = max30205_basic_init(MAX30205_ADDRESS_0);
-if (res)
+if (res != 0)
 {
     return 1;
 }
@@ -70,9 +68,9 @@ for (i = 0; i < 3; i++)
 {
     max30205_interface_delay_ms(1000);
     res = max30205_basic_read((float *)&s);
-    if (res)
+    if (res != 0)
     {
-        max30205_basic_deinit();
+        (void)max30205_basic_deinit();
 
         return 1;
     }
@@ -84,7 +82,7 @@ for (i = 0; i < 3; i++)
 
 ...
 
-max30205_basic_deinit();
+(void)max30205_basic_deinit();
 
 return 0;
 ```
@@ -97,7 +95,7 @@ uint8_t i;
 float s;
 
 res = max30205_shot_init(MAX30205_ADDRESS_0);
-if (res)
+if (res != 0)
 {
     return 1;
 }
@@ -108,9 +106,9 @@ for (i = 0; i < 3; i++)
 {
     max30205_interface_delay_ms(1000);
     res = max30205_shot_read((float *)&s);
-    if (res)
+    if (res != 0)
     {
-        max30205_shot_deinit();
+        (void)max30205_shot_deinit();
 
         return 1;
     }
@@ -122,7 +120,7 @@ for (i = 0; i < 3; i++)
 
 ...
 
-max30205_shot_deinit();
+(void)max30205_shot_deinit();
 
 return 0;
 ```
@@ -136,14 +134,14 @@ float s;
 uint8_t g_flag;   
 
 res = gpio_interrupt_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
 res = max30205_interrupt_init(MAX30205_ADDRESS_0, MAX30205_INTERRUPT_MODE_INTERRUPT, 35.5f, 37.6f);
-if (res)
+if (res != 0)
 {
-    gpio_interrupt_deinit();
+    (void)gpio_interrupt_deinit();
 
     return 1;
 }
@@ -155,14 +153,14 @@ for (i = 0; i < 3; i++)
 {
     max30205_interface_delay_ms(1000);
     res = max30205_interrupt_read((float *)&s); 
-    if (res)
+    if (res != 0)
     {
-        gpio_interrupt_deinit();
-        max30205_interrupt_deinit();
+        (void)gpio_interrupt_deinit();
+        (void)max30205_interrupt_deinit();
 
         return 1;
     }
-    if (g_flag)
+    if (g_flag != 0)
     {
         max30205_interface_debug_print("max30205: find interrupt.\n");
 
@@ -178,8 +176,8 @@ for (i = 0; i < 3; i++)
 
 ...
 
-gpio_interrupt_deinit();
-max30205_interrupt_deinit();
+(void)gpio_interrupt_deinit();
+(void)max30205_interrupt_deinit();
 
 return 0;
 ```

@@ -108,7 +108,7 @@ uint8_t max30205_init(max30205_handle_t *handle)
         return 3;                                                      /* return error */
     }
 
-    if (handle->iic_init())                                            /* init iic */
+    if (handle->iic_init() != 0)                                       /* init iic */
     {
         handle->debug_print("max30205: iic init failed.\n");           /* iic init failed */
         
@@ -132,7 +132,7 @@ uint8_t max30205_init(max30205_handle_t *handle)
  */
 uint8_t max30205_deinit(max30205_handle_t *handle)
 {
-    volatile uint8_t reg;
+    uint8_t reg;
     
     if (handle == NULL)                                                                    /* check handle */
     {
@@ -144,13 +144,13 @@ uint8_t max30205_deinit(max30205_handle_t *handle)
     }
     
     reg = handle->reg | 0x01;                                                              /* power down */
-    if (handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1))        /* write to conf register */
+    if (handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1) != 0)   /* write to conf register */
     {
         handle->debug_print("max30205: power down failed.\n");                             /* power down failed */
         
         return 1;                                                                          /* return error */
     }
-    if (handle->iic_deinit())                                                              /* iic deinit */
+    if (handle->iic_deinit() != 0)                                                         /* iic deinit */
     {
         handle->debug_print("max30205: iic deinit failed.\n");                             /* iic deinit failed */
         
@@ -172,14 +172,14 @@ uint8_t max30205_deinit(max30205_handle_t *handle)
  */
 uint8_t max30205_set_addr_pin(max30205_handle_t *handle, max30205_address_t addr_pin)
 {
-    if (handle == NULL)                 /* check handle */
+    if (handle == NULL)                          /* check handle */
     {
-        return 2;                       /* return error */
+        return 2;                                /* return error */
     }
 
-    handle->iic_addr = addr_pin;        /* set iic address */
+    handle->iic_addr = (uint8_t)addr_pin;        /* set iic address */
     
-    return 0;                           /* success return 0 */
+    return 0;                                    /* success return 0 */
 }
 
 /**
@@ -224,13 +224,13 @@ uint8_t max30205_set_data_format(max30205_handle_t *handle, max30205_data_format
         return 3;                                     /* return error */
     }
 
-    if (format)                                       /* if extended format */
+    if (format != 0)                                  /* if extended format */
     {
-        handle->reg = handle->reg | (1<<5);           /* set extended format */
+        handle->reg = handle->reg | (1 << 5);         /* set extended format */
     }
     else
     {
-        handle->reg = handle->reg & (~(1<<5));        /* set normal format */
+        handle->reg = handle->reg & (~(1 << 5));      /* set normal format */
     }
     
     return 0;                                         /* success return 0 */
@@ -257,7 +257,7 @@ uint8_t max30205_get_data_format(max30205_handle_t *handle, max30205_data_format
         return 3;                                       /* return error */
     }
 
-    if (handle->reg & (1<<5))                           /* get format */
+    if ((handle->reg & (1 << 5)) != 0)                  /* get format */
     {
         *format = MAX30205_DATA_FORMAT_EXTENDED;        /* get format extended */
     }
@@ -290,13 +290,13 @@ uint8_t max30205_set_interrupt_mode(max30205_handle_t *handle, max30205_interrup
         return 3;                                     /* return error */
     }
 
-    if (mode)
+    if (mode != 0)                                    /* check the mode */
     {
-        handle->reg = handle->reg | (1<<1);           /* set interrupt mode */
+        handle->reg = handle->reg | (1 << 1);         /* set interrupt mode */
     }
     else
     {
-        handle->reg = handle->reg & (~(1<<1));        /* set comparator mode */
+        handle->reg = handle->reg & (~(1 << 1));      /* set comparator mode */
     }
     
     return 0;                                         /* success return 0 */
@@ -323,7 +323,7 @@ uint8_t max30205_get_interrupt_mode(max30205_handle_t *handle, max30205_interrup
         return 3;                                          /* return error */
     }
     
-    if (handle->reg & (1 << 1))                            /* get interrupt mode */
+    if ((handle->reg & (1 << 1)) != 0)                     /* get interrupt mode */
     {
         *mode = MAX30205_INTERRUPT_MODE_INTERRUPT;         /* interrupt mode */
     }
@@ -357,7 +357,8 @@ uint8_t max30205_set_fault_queue(max30205_handle_t *handle, max30205_fault_queue
     }
     
     handle->reg = handle->reg & (~(3 << 3));               /* clear fault queue */
-    handle->reg = handle->reg | (fault_queue << 3);        /* set fault queue */
+    handle->reg = (uint8_t)(handle->reg | 
+                  (fault_queue << 3));                     /* set fault queue */
     
     return 0;                                              /* success return 0 */
 }
@@ -409,13 +410,13 @@ uint8_t max30205_set_pin_polarity(max30205_handle_t *handle, max30205_pin_polari
         return 3;                                     /* return error */
     }
     
-    if (polarity)
+    if (polarity != 0)                                /* check the polarity */
     {
-        handle->reg = handle->reg | (1<<2);           /* set active high */
+        handle->reg = handle->reg | (1 << 2);         /* set active high */
     }
     else
     {
-        handle->reg = handle->reg & (~(1<<2));        /* set active low */
+        handle->reg = handle->reg & (~(1 << 2));      /* set active low */
     }
     
     return 0;                                         /* success return 0 */
@@ -442,7 +443,7 @@ uint8_t max30205_get_pin_polarity(max30205_handle_t *handle, max30205_pin_polari
         return 3;                                      /* return error */
     }
     
-    if (handle->reg & (1 << 2))                        /* active high */
+    if ((handle->reg & (1 << 2)) != 0)                 /* active high */
     {
         *polarity = MAX30205_PIN_POLARITY_HIGH;        /* high polarity */
     }
@@ -475,13 +476,13 @@ uint8_t max30205_set_bus_timeout(max30205_handle_t *handle, max30205_bus_timeout
         return 3;                                     /* return error */
     }
     
-    if (bus_timeout)
+    if (bus_timeout != 0)                             /* check the bus timeout */
     {
-        handle->reg = handle->reg | (1<<6);           /* disable bus timeout */
+        handle->reg = handle->reg | (1 << 6);         /* disable bus timeout */
     }
     else
     {
-        handle->reg = handle->reg & (~(1<<6));        /* enable bus timeout */
+        handle->reg = handle->reg & (~(1 << 6));      /* enable bus timeout */
     }
     
     return 0;                                         /* success return 0 */
@@ -508,7 +509,7 @@ uint8_t max30205_get_bus_timeout(max30205_handle_t *handle, max30205_bus_timeout
         return 3;                                           /* return error */
     }
     
-    if (handle->reg & (1<<6))                               /* disable bus timeout */
+    if ((handle->reg & (1 << 6)) != 0)                      /* disable bus timeout */
     {
         *bus_timeout = MAX30205_BUS_TIMEOUT_DISABLE;        /* bus timeout disable */
     }
@@ -532,7 +533,7 @@ uint8_t max30205_get_bus_timeout(max30205_handle_t *handle, max30205_bus_timeout
  */
 uint8_t max30205_start_continuous_read(max30205_handle_t *handle)
 {
-    volatile uint8_t reg;
+    uint8_t reg;
     
     if (handle == NULL)                                                                       /* check handle */
     {
@@ -544,9 +545,17 @@ uint8_t max30205_start_continuous_read(max30205_handle_t *handle)
     }
     
     reg = handle->reg & (~(1 << 0));                                                          /* exit shutdown mode */
-    reg = handle->reg & (~(1 << 7));                                                          /* set continuous read bit */
-    
-    return handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1);        /* write conf register */
+    reg = reg & (~(1 << 7));                                                                  /* set continuous read bit */
+    if (handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1) != 0)      /* write conf register */
+    {
+        handle->debug_print("max30205: start continuous read failed.\n");                     /* start continuous read failed */
+        
+        return 1;                                                                             /* return error */
+    }
+    else
+    {
+        return 0;                                                                             /* success return 0 */
+    }
 }
 
 /**
@@ -561,7 +570,7 @@ uint8_t max30205_start_continuous_read(max30205_handle_t *handle)
  */
 uint8_t max30205_stop_continuous_read(max30205_handle_t *handle)
 {
-    volatile uint8_t reg;
+    uint8_t reg;
     
     if (handle == NULL)                                                                       /* check handle */
     {
@@ -573,9 +582,18 @@ uint8_t max30205_stop_continuous_read(max30205_handle_t *handle)
     }
     
     reg = handle->reg | (1 << 0);                                                             /* enter shutdown mode */
-    reg = handle->reg | (1 << 7);                                                             /* set continuous read bit */
+    reg = reg | (1 << 7);                                                                     /* set continuous read bit */
     
-    return handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1);        /* write conf register */
+    if (handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1) != 0)      /* write conf register */
+    {
+        handle->debug_print("max30205: stop continuous read failed.\n");                      /* stop continuous read failed */
+        
+        return 1;                                                                             /* return error */
+    }
+    else
+    {
+        return 0;                                                                             /* success return 0 */
+    }
 }
 
 /**
@@ -593,7 +611,7 @@ uint8_t max30205_stop_continuous_read(max30205_handle_t *handle)
  */
 uint8_t max30205_continuous_read(max30205_handle_t *handle, int16_t *raw, float *s)
 {
-    volatile uint8_t buf[2];
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                  /* check handle */
     {
@@ -604,20 +622,21 @@ uint8_t max30205_continuous_read(max30205_handle_t *handle, int16_t *raw, float 
         return 3;                                                                        /* return error */
     }
     
-    if (handle->iic_read(handle->iic_addr, MAX30205_REG_TEMP, (uint8_t *)buf, 2))        /* read two bytes */
+    memset(buf, 0, sizeof(uint8_t) * 2);                                                 /* clear the buffer */
+    if (handle->iic_read(handle->iic_addr, MAX30205_REG_TEMP, (uint8_t *)buf, 2) != 0)   /* read two bytes */
     {
         handle->debug_print("max30205: read failed.\n");                                 /* read temp failed */
         
         return 1;                                                                        /* return error */
     }
-    if (handle->reg & (1 << 5))                                                          /* extended format */
+    if ((handle->reg & (1 << 5)) != 0)                                                   /* extended format */
     {
-        *raw = (buf[0]) << 8 | buf[1];                                                   /* get raw data */
+        *raw = (int16_t)(((uint16_t)buf[0]) << 8 | buf[1]);                              /* get raw data */
         *s = (float)(*raw) * 0.00390625f + 64.0f;                                        /* convert raw data to real data */
     }
     else                                                                                 /* normal format */
     {
-        *raw = buf[0] << 8 | buf[1];                                                     /* get raw data */
+        *raw = (int16_t)(((uint16_t)buf[0]) << 8 | buf[1]);                              /* get raw data */
         *s = (float)(*raw) * 0.00390625f;                                                /* convert raw data to real data */
     }
     
@@ -638,8 +657,8 @@ uint8_t max30205_continuous_read(max30205_handle_t *handle, int16_t *raw, float 
  */
 uint8_t max30205_single_read(max30205_handle_t *handle, int16_t *raw, float *s)
 {
-    volatile uint8_t buf[2];
-    volatile uint8_t reg;
+    uint8_t buf[2];
+    uint8_t reg;
     
     if (handle == NULL)                                                                    /* check handle */
     {
@@ -651,28 +670,29 @@ uint8_t max30205_single_read(max30205_handle_t *handle, int16_t *raw, float *s)
     }
     
     reg = handle->reg | (1 << 0);                                                          /* enter shutdown mode */
-    reg = handle->reg | (1 << 7);                                                          /* set single read bit */
-    if (handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1))        /* write conf */
+    reg = reg | (1 << 7);                                                                  /* set single read bit */
+    if (handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1) != 0)   /* write conf */
     {
         handle->debug_print("max30205: write failed.\n");                                  /* write failed */
        
         return 1;                                                                          /* return error */
     }
     handle->delay_ms(50);                                                                  /* delay 50 ms */
-    if (handle->iic_read(handle->iic_addr, MAX30205_REG_TEMP, (uint8_t *)buf, 2))          /* read two bytes */
+    memset(buf, 0, sizeof(uint8_t) * 2);                                                   /* clear the buffer */
+    if (handle->iic_read(handle->iic_addr, MAX30205_REG_TEMP, (uint8_t *)buf, 2) != 0)     /* read two bytes */
     {
         handle->debug_print("max30205: read failed.\n");                                   /* read failed */
        
         return 1;                                                                          /* return error */
     }
-    if (handle->reg & (1 << 5))                                                            /* extended format */
+    if ((handle->reg & (1 << 5)) != 0)                                                     /* extended format */
     {
-        *raw = (buf[0]) << 8 | buf[1];                                                     /* get raw data */
+        *raw = (int16_t)(((uint16_t)buf[0]) << 8 | buf[1]);                                /* get raw data */
         *s = (float)(*raw) * 0.00390625f + 64.0f;                                          /* convert raw data to real data */
     }
     else                                                                                   /* normal format */
     {
-        *raw = buf[0] << 8 | buf[1];                                                       /* get raw data */
+        *raw = (int16_t)(((uint16_t)buf[0]) << 8 | buf[1]);                                /* get raw data */
         *s = (float)(*raw) * 0.00390625f;                                                  /* convert raw data to real data */
     }
     
@@ -692,7 +712,7 @@ uint8_t max30205_single_read(max30205_handle_t *handle, int16_t *raw, float *s)
  */
 uint8_t max30205_set_interrupt_low_threshold(max30205_handle_t *handle, int16_t threshold)
 {
-    volatile uint8_t buf[2];
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                       /* check handle */
     {
@@ -705,8 +725,16 @@ uint8_t max30205_set_interrupt_low_threshold(max30205_handle_t *handle, int16_t 
     
     buf[0] = (threshold >> 8) & 0xFF;                                                         /* MSB */
     buf[1] = threshold & 0xFF;                                                                /* LSB */
-    
-    return handle->iic_write(handle->iic_addr, MAX30205_REG_THYST, (uint8_t *)buf, 2);        /* write to register */
+    if (handle->iic_write(handle->iic_addr, MAX30205_REG_THYST, (uint8_t *)buf, 2) != 0)      /* write to register */
+    {
+        handle->debug_print("max30205: set interrupt low threshold failed.\n");               /* set interrupt low threshold failed */
+        
+        return 1;                                                                             /* return error */
+    }
+    else
+    {
+        return 0;                                                                             /* success return 0 */
+    }
 }
 
 /**
@@ -722,7 +750,7 @@ uint8_t max30205_set_interrupt_low_threshold(max30205_handle_t *handle, int16_t 
  */
 uint8_t max30205_get_interrupt_low_threshold(max30205_handle_t *handle, int16_t *threshold)
 {
-    volatile uint8_t buf[2];
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                   /* check handle */
     {
@@ -733,13 +761,14 @@ uint8_t max30205_get_interrupt_low_threshold(max30205_handle_t *handle, int16_t 
         return 3;                                                                         /* return error */
     }
     
-    if (handle->iic_read(handle->iic_addr, MAX30205_REG_THYST, (uint8_t *)buf, 2))        /* read 2 bytes */
+    memset(buf, 0, sizeof(uint8_t) * 2);                                                  /* clear the buffer */
+    if (handle->iic_read(handle->iic_addr, MAX30205_REG_THYST, (uint8_t *)buf, 2) != 0)   /* read 2 bytes */
     {
         handle->debug_print("max30205: read failed.\n");                                  /* read thyst failed */
         
         return 1;                                                                         /* return error */
     }
-    *threshold = (buf[0]) << 8 | buf[1];                                                  /* get raw data */
+    *threshold = (int16_t)(((uint16_t)buf[0]) << 8 | buf[1]);                             /* get raw data */
     
     return 0;                                                                             /* success return 0 */
 }
@@ -757,7 +786,7 @@ uint8_t max30205_get_interrupt_low_threshold(max30205_handle_t *handle, int16_t 
  */
 uint8_t max30205_set_interrupt_high_threshold(max30205_handle_t *handle, int16_t threshold)
 {
-    volatile uint8_t buf[2];
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                     /* check handle */
     {
@@ -770,8 +799,16 @@ uint8_t max30205_set_interrupt_high_threshold(max30205_handle_t *handle, int16_t
     
     buf[0] = (threshold >> 8) & 0xFF;                                                       /* MSB */
     buf[1] = threshold & 0xFF;                                                              /* LSB */
-    
-    return handle->iic_write(handle->iic_addr, MAX30205_REG_TOS, (uint8_t *)buf, 2);        /* write to register */
+    if (handle->iic_write(handle->iic_addr, MAX30205_REG_TOS, (uint8_t *)buf, 2) != 0)      /* write to register */
+    {
+        handle->debug_print("max30205: set interrupt high threshold failed.\n");            /* set interrupt high threshold failed */
+        
+        return 1;                                                                           /* return error */
+    }
+    else
+    {
+        return 0;                                                                           /* success return 0 */
+    }
 }
 
 /**
@@ -787,7 +824,7 @@ uint8_t max30205_set_interrupt_high_threshold(max30205_handle_t *handle, int16_t
  */
 uint8_t max30205_get_interrupt_high_threshold(max30205_handle_t *handle, int16_t *threshold)
 {
-    volatile uint8_t buf[2];
+    uint8_t buf[2];
     
     if (handle == NULL)                                                                 /* check handle */
     {
@@ -798,13 +835,14 @@ uint8_t max30205_get_interrupt_high_threshold(max30205_handle_t *handle, int16_t
         return 3;                                                                       /* return error */
     }
     
-    if (handle->iic_read(handle->iic_addr, MAX30205_REG_TOS, (uint8_t *)buf, 2))        /* read 2 bytes */
+    memset(buf, 0, sizeof(uint8_t) * 2);                                                /* clear the buffer */
+    if (handle->iic_read(handle->iic_addr, MAX30205_REG_TOS, (uint8_t *)buf, 2) != 0)   /* read 2 bytes */
     {
         handle->debug_print("max30205: read failed.\n");                                /* read tos failed */
         
         return 1;                                                                       /* return error */
     }
-    *threshold = (buf[0]) << 8 | buf[1];                                                /* get raw data */
+    *threshold = (int16_t)(((uint16_t)buf[0]) << 8 | buf[1]);                           /* get raw data */
     
     return 0;                                                                           /* success return 0 */
 }
@@ -831,9 +869,9 @@ uint8_t max30205_convert_to_register(max30205_handle_t *handle, float s, int16_t
         return 3;                                         /* return error */
     }
     
-    if (handle->reg & (1 << 5))                           /* extended format */
+    if ((handle->reg & (1 << 5)) != 0)                    /* extended format */
     {
-        *reg = (int16_t)((s-64.0f) / 0.00390625f);        /* convert real data to register data */
+        *reg = (int16_t)((s - 64.0f) / 0.00390625f);      /* convert real data to register data */
     }
     else                                                  /* normal format */
     {
@@ -866,7 +904,7 @@ uint8_t max30205_convert_to_data(max30205_handle_t *handle, int16_t reg, float *
         return 3;                                       /* return error */
     }
     
-    if (handle->reg & (1 << 5))                         /* extended format */
+    if ((handle->reg & (1 << 5)) != 0)                  /* extended format */
     {
         *s = (float)(reg) * 0.00390625f + 64.0f;        /* convert raw data to real data */
     }
@@ -890,7 +928,7 @@ uint8_t max30205_convert_to_data(max30205_handle_t *handle, int16_t reg, float *
  */
 uint8_t max30205_power_down(max30205_handle_t *handle)
 {
-    volatile uint8_t reg;
+    uint8_t reg;
     
     if (handle == NULL)                                                                       /* check handle */
     {
@@ -902,8 +940,16 @@ uint8_t max30205_power_down(max30205_handle_t *handle)
     }
     
     reg = handle->reg | 0x01;                                                                 /* set shutdown bit */
-    
-    return handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1);        /* write to conf register */
+    if (handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1) != 0)      /* write to conf register */
+    {
+        handle->debug_print("max30205: power down failed.\n");                                /* power down failed */
+        
+        return 1;                                                                             /* return error */
+    }
+    else
+    {
+        return 0;                                                                             /* success return 0 */
+    }
 }
 
 /**
@@ -930,7 +976,16 @@ uint8_t max30205_set_reg(max30205_handle_t *handle, uint8_t reg, uint8_t *buf, u
         return 3;                                                     /* return error */
     }
     
-    return handle->iic_write(handle->iic_addr, reg, buf, len);        /* write data */
+    if (handle->iic_write(handle->iic_addr, reg, buf, len) != 0)      /* write data */
+    {
+        handle->debug_print("max30205: write failed.\n");             /* write failed */
+        
+        return 1;                                                     /* return error */
+    }
+    else
+    {
+        return 0;                                                     /* success return 0 */
+    }
 }
 
 /**
@@ -957,7 +1012,16 @@ uint8_t max30205_get_reg(max30205_handle_t *handle, uint8_t reg, uint8_t *buf, u
         return 3;                                                    /* return error */
     }
     
-    return handle->iic_read(handle->iic_addr, reg, buf, len);        /* read data */
+   if (handle->iic_read(handle->iic_addr, reg, buf, len) != 0)       /* read data */
+    {
+        handle->debug_print("max30205: read failed.\n");             /* read failed */
+        
+        return 1;                                                    /* return error */
+    }
+    else
+    {
+        return 0;                                                    /* success return 0 */
+    }
 }
 
 /**

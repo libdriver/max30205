@@ -36,6 +36,7 @@
  */
 
 #include "driver_max30205_register_test.h"
+#include <math.h>
 
 static max30205_handle_t gs_handle;        /**< max30205 handle */
 
@@ -49,10 +50,10 @@ static max30205_handle_t gs_handle;        /**< max30205 handle */
  */
 uint8_t max30205_register_test(max30205_address_t addr)
 {
-    volatile uint8_t res;
-    volatile int16_t reg;
-    volatile int16_t threshold;
-    volatile float s;
+    uint8_t res;
+    int16_t reg;
+    int16_t threshold;
+    float s;
     max30205_info_t info;
     max30205_address_t addr_pin;
     max30205_data_format_t format;
@@ -72,7 +73,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* get information */
     res = max30205_info(&info);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get info failed.\n");
        
@@ -98,7 +99,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_0 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_0);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -106,7 +107,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_0.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -116,7 +117,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_1 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_1);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -124,7 +125,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_1.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -134,7 +135,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_2 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_2);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -142,7 +143,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_2.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -152,7 +153,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_3 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_3);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
         
@@ -160,7 +161,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_3.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -170,7 +171,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_4 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_4);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -178,7 +179,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_4.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -188,7 +189,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_5 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_5);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -196,7 +197,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_5.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -206,7 +207,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_6 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_6);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -214,7 +215,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_6.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -224,7 +225,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_7 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_7);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -232,7 +233,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_7.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -242,7 +243,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_8 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_8);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -250,7 +251,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_8.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -260,7 +261,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_9 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_9);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
         
@@ -268,7 +269,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_9.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
         
@@ -278,7 +279,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_A */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_A);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
         
@@ -286,7 +287,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_A.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -296,7 +297,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_B */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_B);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -304,7 +305,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_B.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -314,7 +315,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_C */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_C);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -322,7 +323,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_C.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -332,7 +333,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /*set ADDRESS_D */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_D);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -340,7 +341,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_D.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -350,7 +351,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_E */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_E);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -358,7 +359,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_E.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -368,7 +369,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_F */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_F);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -376,7 +377,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_F.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -386,7 +387,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_10 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_10);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -394,7 +395,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_10.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -404,7 +405,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_11 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_11);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -412,7 +413,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_11.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -422,7 +423,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_12 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_12);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -430,7 +431,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_12.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -440,7 +441,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_13 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_13);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -448,7 +449,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_13.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -458,7 +459,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_14 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_14);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -466,7 +467,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_14.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -476,7 +477,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_15 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_15);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -484,7 +485,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_15.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -494,7 +495,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_16 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_16);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -502,7 +503,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_16.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -512,7 +513,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_17 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_17);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -520,7 +521,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_17.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -530,7 +531,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_18 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_18);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -538,7 +539,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_18.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -548,7 +549,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_19 */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_19);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -556,7 +557,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_19.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -566,7 +567,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_1A */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_1A);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -574,7 +575,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_1A.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
         
@@ -584,7 +585,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_1B */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_1B);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -592,7 +593,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_1B.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -602,7 +603,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_1C */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_1C);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -610,7 +611,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_1C.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -620,7 +621,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_1D */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_1D);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -628,7 +629,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_1D.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -638,7 +639,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_1E */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_1E);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -646,7 +647,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_1E.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -656,7 +657,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set ADDRESS_1F */
     res = max30205_set_addr_pin(&gs_handle, MAX30205_ADDRESS_1F);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
         
@@ -664,7 +665,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: set addr pin ADDRESS_1F.\n");
     res = max30205_get_addr_pin(&gs_handle, &addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get addr pin failed.\n");
        
@@ -672,7 +673,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     }
     max30205_interface_debug_print("max30205: check addr pin %s.\n", addr_pin==MAX30205_ADDRESS_1F?"ok":"error");
     res = max30205_set_addr_pin(&gs_handle, addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -681,7 +682,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set iic address */
     res = max30205_set_addr_pin(&gs_handle, addr);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
        
@@ -690,7 +691,7 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* max30205 init */
     res = max30205_init(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: init failed.\n");
        
@@ -702,19 +703,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set NORMAL */
     res = max30205_set_data_format(&gs_handle, MAX30205_DATA_FORMAT_NORMAL);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set data format failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set data format normal.\n");
     res = max30205_get_data_format(&gs_handle, &format);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get data format failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -722,19 +723,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set EXTENDED */
     res = max30205_set_data_format(&gs_handle, MAX30205_DATA_FORMAT_EXTENDED);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set data format failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set data format extended.\n");
     res = max30205_get_data_format(&gs_handle, &format);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get data format failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -745,19 +746,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set COMPARATOR */
     res = max30205_set_interrupt_mode(&gs_handle, MAX30205_INTERRUPT_MODE_COMPARATOR);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set interrupt mode failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set interrupt mode comparator.\n");
     res = max30205_get_interrupt_mode(&gs_handle, &mode);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get interrupt mode failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -765,19 +766,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set INTERRUPT */
     res = max30205_set_interrupt_mode(&gs_handle, MAX30205_INTERRUPT_MODE_INTERRUPT);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set interrupt mode failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set interrupt mode interrupt.\n");
     res = max30205_get_interrupt_mode(&gs_handle, &mode);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get interrupt mode failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -788,19 +789,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set FAULT_QUEUE_1 */
     res = max30205_set_fault_queue(&gs_handle, MAX30205_FAULT_QUEUE_1);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set fault queue failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set fault queue 1.\n");
     res = max30205_get_fault_queue(&gs_handle, &fault_queue);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get fault queue failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -808,19 +809,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set FAULT_QUEUE_2 */
     res = max30205_set_fault_queue(&gs_handle, MAX30205_FAULT_QUEUE_2);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set fault queue failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set fault queue 2.\n");
     res = max30205_get_fault_queue(&gs_handle, &fault_queue);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get fault queue failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -828,19 +829,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set FAULT_QUEUE_4 */
     res = max30205_set_fault_queue(&gs_handle, MAX30205_FAULT_QUEUE_4);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set fault queue failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set fault queue 4.\n");
     res = max30205_get_fault_queue(&gs_handle, &fault_queue);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get fault queue failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -848,19 +849,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set FAULT_QUEUE_6 */
     res = max30205_set_fault_queue(&gs_handle, MAX30205_FAULT_QUEUE_6);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set fault queue failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set fault queue 6.\n");
     res = max30205_get_fault_queue(&gs_handle, &fault_queue);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get fault queue failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -871,19 +872,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set POLARITY_LOW */
     res = max30205_set_pin_polarity(&gs_handle, MAX30205_PIN_POLARITY_LOW);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set pin polarity failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set pin polarity low.\n");
     res = max30205_get_pin_polarity(&gs_handle, &polarity);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get pin polarity failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -891,19 +892,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set POLARITY_HIGH */
     res = max30205_set_pin_polarity(&gs_handle, MAX30205_PIN_POLARITY_HIGH);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set pin polarity failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set pin polarity high.\n");
     res = max30205_get_pin_polarity(&gs_handle, &polarity);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get pin polarity failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -912,19 +913,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set BUS_TIMEOUT_ENABLE */
     res = max30205_set_bus_timeout(&gs_handle, MAX30205_BUS_TIMEOUT_ENABLE);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set bus timeout failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set bus timeout enable.\n");
     res = max30205_get_bus_timeout(&gs_handle, &bus_timeout);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get bus timeout failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -932,19 +933,19 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set BUS_TIMEOUT_DISABLE */
     res = max30205_set_bus_timeout(&gs_handle, MAX30205_BUS_TIMEOUT_DISABLE);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set bus timeout failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set bus timeout disable.\n");
     res = max30205_get_bus_timeout(&gs_handle, &bus_timeout);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get bus timeout failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -953,83 +954,83 @@ uint8_t max30205_register_test(max30205_address_t addr)
     /* set NORMAL CONVERT TEST */
     max30205_interface_debug_print("max30205: max30205_convert_to_register/max30205_convert_to_data test.\n");
     res = max30205_set_data_format(&gs_handle, MAX30205_DATA_FORMAT_NORMAL);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set data format failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     res = max30205_convert_to_register(&gs_handle, 20.0f, (int16_t *)&reg);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: convert to register failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     res = max30205_convert_to_data(&gs_handle, (int16_t)reg, (float *)&s);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: convert to data failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
-    max30205_interface_debug_print("max30205: check normal mode convert %s.\n", s==20.f?"ok":"error");
+    max30205_interface_debug_print("max30205: check normal mode convert %s.\n", fabsf(s - 20.f) < 0.000001f?"ok":"error");
     
     /* set EXTENDED CONVERT TEST */
     max30205_interface_debug_print("max30205: max30205_convert_to_register/max30205_convert_to_data test.\n");
     res = max30205_set_data_format(&gs_handle, MAX30205_DATA_FORMAT_EXTENDED);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set data format failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     res = max30205_convert_to_register(&gs_handle, 25.0f, (int16_t *)&reg);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: convert to register failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     res = max30205_convert_to_data(&gs_handle, (int16_t)reg, (float *)&s);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: convert to data failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
-    max30205_interface_debug_print("max30205: check extended mode convert %s.\n", s==25.f?"ok":"error");
+    max30205_interface_debug_print("max30205: check extended mode convert %s.\n", fabsf(s - 25.f) < 0.000001f?"ok":"error");
     max30205_interface_debug_print("max30205: max30205_set_interrupt_low_threshold/max30205_get_interrupt_low_threshold test.\n");
     
     /* set INTERRUPT_LOW_THRESHOLD */
     res = max30205_convert_to_register(&gs_handle, 35.0f, (int16_t *)&reg);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: convert to register failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     res = max30205_set_interrupt_low_threshold(&gs_handle, (int16_t)reg);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set interrupt low threshold failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set interrupt low threshold 35.0.\n");
     res = max30205_get_interrupt_low_threshold(&gs_handle, (int16_t *)&threshold);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get interrupt low threshold failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -1040,44 +1041,44 @@ uint8_t max30205_register_test(max30205_address_t addr)
     
     /* set INTERRUPT_HIGH_THRESHOLD */
     res = max30205_convert_to_register(&gs_handle, 38.0f, (int16_t *)&reg);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: convert to register failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     res = max30205_set_interrupt_high_threshold(&gs_handle, (int16_t)reg);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set interrupt high threshold failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: set interrupt high threshold 38.0.\n");
     res = max30205_get_interrupt_high_threshold(&gs_handle, (int16_t *)&threshold);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: get interrupt high threshold failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     max30205_interface_debug_print("max30205: check high threshold %s.\n", threshold==reg?"ok":"error");
     max30205_interface_debug_print("max30205: max30205_power_down test.\n");
     res = max30205_power_down(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: power down failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     
     /* finish register test */
     max30205_interface_debug_print("max30205: finish register test.\n");
-    max30205_deinit(&gs_handle);
+    (void)max30205_deinit(&gs_handle);
     
     return 0;
 }

@@ -35,8 +35,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_MAX30205_INTERRUPT_TEST_H_
-#define _DRIVER_MAX30205_INTERRUPT_TEST_H_
+#ifndef DRIVER_MAX30205_INTERRUPT_TEST_H
+#define DRIVER_MAX30205_INTERRUPT_TEST_H
 
 #include "driver_max30205_interface.h"
 

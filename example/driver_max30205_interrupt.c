@@ -52,9 +52,9 @@ static max30205_handle_t gs_handle;        /**< max30205 handle */
  */
 uint8_t max30205_interrupt_init(max30205_address_t addr_pin, max30205_interrupt_mode_t mode, float low, float high)
 {
-    volatile uint8_t res;
-    volatile int16_t low_threshold;
-    volatile int16_t high_threshold;
+    uint8_t res;
+    int16_t low_threshold;
+    int16_t high_threshold;
     
     /* link interface function */
     DRIVER_MAX30205_LINK_INIT(&gs_handle, max30205_handle_t);
@@ -67,7 +67,7 @@ uint8_t max30205_interrupt_init(max30205_address_t addr_pin, max30205_interrupt_
     
     /* set max30205 iic address */
     res = max30205_set_addr_pin(&gs_handle, addr_pin);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set addr pin failed.\n");
         
@@ -76,7 +76,7 @@ uint8_t max30205_interrupt_init(max30205_address_t addr_pin, max30205_interrupt_
     
     /* max30205 init */
     res = max30205_init(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: init failed.\n");
         
@@ -85,100 +85,100 @@ uint8_t max30205_interrupt_init(max30205_address_t addr_pin, max30205_interrupt_
     
     /* set data format */
     res = max30205_set_data_format(&gs_handle, MAX30205_INTERRUPT_DEFAULT_DATA_FORMAT);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set data format failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set interrupt mode */
     res = max30205_set_interrupt_mode(&gs_handle, mode);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set interrupt mode failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set fault queue */
     res = max30205_set_fault_queue(&gs_handle, MAX30205_INTERRUPT_DEFAULT_FAULT_QUEUE);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set fault queue failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set pin polarity */
     res = max30205_set_pin_polarity(&gs_handle, MAX30205_INTERRUPT_DEFAULT_PIN_POLARITY);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set pin polarity failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set bus timeout */
     res = max30205_set_bus_timeout(&gs_handle, MAX30205_INTERRUPT_DEFAULT_BUS_TIMEOUT);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set bus timeout failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     
     /* convert low threshold */
     res= max30205_convert_to_register(&gs_handle, low, (int16_t *)&low_threshold);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: convert to register failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set interrupt low threshold */
     res = max30205_set_interrupt_low_threshold(&gs_handle, low_threshold);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set low threshold failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     
     /* convert high threshold */
     res = max30205_convert_to_register(&gs_handle, high, (int16_t *)&high_threshold);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: convert to register failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     
     /* set interrupt high threshold */
     res = max30205_set_interrupt_high_threshold(&gs_handle, high_threshold);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: set high threshold failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
     
     /* start continuous read */
     res = max30205_start_continuous_read(&gs_handle);
-    if (res)
+    if (res != 0)
     {
         max30205_interface_debug_print("max30205: start continuous read failed.\n");
-        max30205_deinit(&gs_handle);
+        (void)max30205_deinit(&gs_handle);
         
         return 1;
     }
@@ -196,10 +196,10 @@ uint8_t max30205_interrupt_init(max30205_address_t addr_pin, max30205_interrupt_
  */
 uint8_t max30205_interrupt_read(float *s)
 {
-    volatile int16_t raw;
+    int16_t raw;
     
     /* read data */
-    if (max30205_continuous_read(&gs_handle, (int16_t *)&raw, s))
+    if (max30205_continuous_read(&gs_handle, (int16_t *)&raw, s) != 0)
     {
         return 1;
     }
@@ -218,19 +218,17 @@ uint8_t max30205_interrupt_read(float *s)
  */
 uint8_t max30205_interrupt_deinit(void)
 {
-    volatile uint8_t res;
+    uint8_t res;
     
     /* stop continuous read */
     res = max30205_stop_continuous_read(&gs_handle);
-    if (res)
+    if (res != 0)
     {
-        max30205_interface_debug_print("max30205: stop continuous read failed.\n");
-        
         return 1;
     }
     
     /* close max30205 */
-    if (max30205_deinit(&gs_handle))
+    if (max30205_deinit(&gs_handle) != 0)
     {
         return 1;
     }
