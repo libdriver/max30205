@@ -35,8 +35,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_MAX30205_SHOT_H_
-#define _DRIVER_MAX30205_SHOT_H_
+#ifndef DRIVER_MAX30205_SHOT_H
+#define DRIVER_MAX30205_SHOT_H
 
 #include "driver_max30205_interface.h"
 

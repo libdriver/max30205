@@ -1,4 +1,4 @@
-[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md)
+[English](/README.md) | [ 简体中文](/README_zh-Hans.md) | [繁體中文](/README_zh-Hant.md) | [日本語](/README_ja.md) | [Deutsch](/README_de.md) | [한국어](/README_ko.md)
 
 <div align=center>
 <img src="/doc/image/logo.png"/>
@@ -6,11 +6,11 @@
 
 ## LibDriver MAX30205
 
-[![API](https://img.shields.io/badge/api-reference-blue)](https://www.libdriver.com/docs/max30205/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
+[![MISRA](https://img.shields.io/badge/misra-compliant-brightgreen.svg)](/misra/README.md) [![API](https://img.shields.io/badge/api-reference-blue.svg)](https://www.libdriver.com/docs/max30205/index.html) [![License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](/LICENSE)
 
 MAX30205温度传感器可高精度测量温度，提供过热报警/中断/关断输出。器件利用高分辨率、Σ-Δ、模/数转换器(ADC)将温度测量值转换为数字形式。焊接到最终PCB上时，精度满足ASTM E1112的临床测温仪技术规范。通过I2C兼容2线串行接口进行通信。I2C串行接口支持标准写字节、读字节、发送字节和接收字节命令，以读取温度数据以及配置开漏过热关断输出模式。MAX30205具有三条地址选择线，提供总共32个可用地址。传感器采用2.7V至3.3V供电电压范围、600µA低供电电流、锁定保护I2C兼容接口，使其可理想用于可穿戴健身和医疗应用。器件采用8引脚TDFN封装，工作在0°C至+50°C温度范围。MAX30205被用于健身和医疗等。
 
-LibDriver MAX30205是LibDriver推出的MAX30205的全功能驱动，该驱动提供连续温度读取、单次温度读取和温度中断等功能。
+LibDriver MAX30205是LibDriver推出的MAX30205的全功能驱动，该驱动提供连续温度读取、单次温度读取和温度中断等功能并且它符合MISRA标准。
 
 ### 目录
 
@@ -57,7 +57,7 @@ uint8_t i;
 float s;
 
 res = max30205_basic_init(MAX30205_ADDRESS_0);
-if (res)
+if (res != 0)
 {
     return 1;
 }
@@ -68,9 +68,9 @@ for (i = 0; i < 3; i++)
 {
     max30205_interface_delay_ms(1000);
     res = max30205_basic_read((float *)&s);
-    if (res)
+    if (res != 0)
     {
-        max30205_basic_deinit();
+        (void)max30205_basic_deinit();
 
         return 1;
     }
@@ -82,7 +82,7 @@ for (i = 0; i < 3; i++)
 
 ...
 
-max30205_basic_deinit();
+(void)max30205_basic_deinit();
 
 return 0;
 ```
@@ -95,7 +95,7 @@ uint8_t i;
 float s;
 
 res = max30205_shot_init(MAX30205_ADDRESS_0);
-if (res)
+if (res != 0)
 {
     return 1;
 }
@@ -106,9 +106,9 @@ for (i = 0; i < 3; i++)
 {
     max30205_interface_delay_ms(1000);
     res = max30205_shot_read((float *)&s);
-    if (res)
+    if (res != 0)
     {
-        max30205_shot_deinit();
+        (void)max30205_shot_deinit();
 
         return 1;
     }
@@ -120,7 +120,7 @@ for (i = 0; i < 3; i++)
 
 ...
 
-max30205_shot_deinit();
+(void)max30205_shot_deinit();
 
 return 0;
 ```
@@ -134,14 +134,14 @@ float s;
 uint8_t g_flag;   
 
 res = gpio_interrupt_init();
-if (res)
+if (res != 0)
 {
     return 1;
 }
 res = max30205_interrupt_init(MAX30205_ADDRESS_0, MAX30205_INTERRUPT_MODE_INTERRUPT, 35.5f, 37.6f);
-if (res)
+if (res != 0)
 {
-    gpio_interrupt_deinit();
+    (void)gpio_interrupt_deinit();
 
     return 1;
 }
@@ -153,14 +153,14 @@ for (i = 0; i < 3; i++)
 {
     max30205_interface_delay_ms(1000);
     res = max30205_interrupt_read((float *)&s); 
-    if (res)
+    if (res != 0)
     {
-        gpio_interrupt_deinit();
-        max30205_interrupt_deinit();
+        (void)gpio_interrupt_deinit();
+        (void)max30205_interrupt_deinit();
 
         return 1;
     }
-    if (g_flag)
+    if (g_flag != 0)
     {
         max30205_interface_debug_print("max30205: find interrupt.\n");
 
@@ -176,8 +176,8 @@ for (i = 0; i < 3; i++)
 
 ...
 
-gpio_interrupt_deinit();
-max30205_interrupt_deinit();
+(void)gpio_interrupt_deinit();
+(void)max30205_interrupt_deinit();
 
 return 0;
 ```

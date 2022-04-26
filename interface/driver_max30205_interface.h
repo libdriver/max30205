@@ -35,8 +35,8 @@
  * </table>
  */
 
-#ifndef _DRIVER_MAX30205_INTERFACE_H_
-#define _DRIVER_MAX30205_INTERFACE_H_
+#ifndef DRIVER_MAX30205_INTERFACE_H
+#define DRIVER_MAX30205_INTERFACE_H
 
 #include "driver_max30205.h"
 
@@ -105,10 +105,9 @@ void max30205_interface_delay_ms(uint32_t ms);
 /**
  * @brief     interface print format data
  * @param[in] fmt is the format data
- * @return    length of the send data
  * @note      none
  */
-uint16_t max30205_interface_debug_print(char *fmt, ...);
+void max30205_interface_debug_print(const char *const fmt, ...);
 
 /**
  * @}
