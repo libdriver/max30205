@@ -29,15 +29,15 @@ LibDriver MAX30205 ist der Treiber mit vollem Funktionsumfang von MAX30205, der 
 
 /src enthält LibDriver MAX30205-Quelldateien.
 
-/interface enthält die plattformunabhängige Vorlage LibDriver MAX30205 IIC。
+/interface enthält die plattformunabhängige Vorlage LibDriver MAX30205 IIC.
 
-/test enthält den Testcode des LibDriver MAX30205-Treibers und dieser Code kann die erforderliche Funktion des Chips einfach testen。
+/test enthält den Testcode des LibDriver MAX30205-Treibers und dieser Code kann die erforderliche Funktion des Chips einfach testen.
 
 /example enthält LibDriver MAX30205-Beispielcode.
 
 /doc enthält das LibDriver MAX30205-Offlinedokument.
 
-/Datenblatt enthält MAX30205-Datenblatt。
+/Datenblatt enthält MAX30205-Datenblatt.
 
 /project enthält den allgemeinen Beispielcode für Linux- und MCU-Entwicklungsboards. Alle Projekte verwenden das Shell-Skript, um den Treiber zu debuggen, und die detaillierten Anweisungen finden Sie in der README.md jedes Projekts.
 
