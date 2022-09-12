@@ -29,15 +29,15 @@ LibDriver MAX30205 is the full function driver of MAX30205 launched by LibDriver
 
 /src includes LibDriver MAX30205 source files.
 
-/interface includes LibDriver MAX30205 IIC platform independent template。
+/interface includes LibDriver MAX30205 IIC platform independent template.
 
-/test includes LibDriver MAX30205 driver test code and this code can test the chip necessary function simply。
+/test includes LibDriver MAX30205 driver test code and this code can test the chip necessary function simply.
 
 /example includes LibDriver MAX30205 sample code.
 
 /doc includes LibDriver MAX30205 offline document.
 
-/datasheet includes MAX30205 datasheet。
+/datasheet includes MAX30205 datasheet.
 
 /project includes the common Linux and MCU development board sample code. All projects use the shell script to debug the driver and the detail instruction can be found in each project's README.md.
 
@@ -52,6 +52,8 @@ Add /src, /interface and /example to your project.
 #### example basic
 
 ```C
+#include "driver_max30205_basic.h"
+
 uint8_t res;
 uint8_t i;
 float s;
@@ -90,6 +92,8 @@ return 0;
 #### example shot
 
 ```C
+#include "driver_max30205_shot.h"
+
 uint8_t res;
 uint8_t i;
 float s;
@@ -128,6 +132,8 @@ return 0;
 #### example interrupt
 
 ```C
+#include "driver_max30205_interrupt.h"
+
 uint8_t res;
 uint8_t i;
 float s;

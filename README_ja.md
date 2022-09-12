@@ -52,6 +52,8 @@ LibDriver MAX30205は、LibDriverによって起動されたMAX30205の全機能
 #### example basic
 
 ```C
+#include "driver_max30205_basic.h"
+
 uint8_t res;
 uint8_t i;
 float s;
@@ -90,6 +92,8 @@ return 0;
 #### example shot
 
 ```c
+#include "driver_max30205_shot.h"
+
 uint8_t res;
 uint8_t i;
 float s;
@@ -128,6 +132,8 @@ return 0;
 #### example interrupt
 
 ```c
+#include "driver_max30205_interrupt.h"
+
 uint8_t res;
 uint8_t i;
 float s;
