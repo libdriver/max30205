@@ -52,6 +52,8 @@ Fügen Sie /src, /interface und /example zu Ihrem Projekt hinzu.
 #### example basic
 
 ```C
+#include "driver_max30205_basic.h"
+
 uint8_t res;
 uint8_t i;
 float s;
@@ -89,6 +91,8 @@ return 0;
 #### example shot
 
 ```C
+#include "driver_max30205_shot.h"
+
 uint8_t res;
 uint8_t i;
 float s;
@@ -127,6 +131,8 @@ return 0;
 #### example interrupt
 
 ```C
+#include "driver_max30205_interrupt.h"
+
 uint8_t res;
 uint8_t i;
 float s;

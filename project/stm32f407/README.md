@@ -1,6 +1,6 @@
-### 1. chip
+### 1. Chip
 
-#### 1.1 chip info
+#### 1.1 Chip Info
 
 chip name : STM32F407ZGT6.
 
@@ -12,23 +12,23 @@ iic pin: SCL/SDA PB8/PB9.
 
 gpio pin: INT PB0.
 
-### 2. shell
+### 2. Shell
 
-#### 2.1 shell parameter
+#### 2.1 Shell Parameter
 
-baud rate: 115200
+baud rate: 115200.
 
-data bits : 8
+data bits : 8.
 
-stop bits: 1
+stop bits: 1.
 
-parity: none
+parity: none.
 
-flow control: none
+flow control: none.
 
-### 3. max30205
+### 3. MAX30205
 
-#### 3.1 command Instruction
+#### 3.1 Command Instruction
 
 ​          max30205 is a basic command which can test all max30205 driver function:
 
@@ -54,7 +54,7 @@ flow control: none
 
 ​           -c int <times> -a <address> -m (INT | CMP) -th <lowthreshold> <highthreshold>         run max30205 interrupt function. times means read times. address means iic address and it can be "00"-"1F". lowthreshold means interrupt low threshold. highthreshold means interrupt high threshold.
 
-#### 3.2 command example
+#### 3.2 Command Example
 
 ```shell
 max30205 -i
