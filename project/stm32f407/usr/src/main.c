@@ -45,14 +45,15 @@
 #include "delay.h"
 #include "gpio.h"
 #include "uart.h"
+#include "getopt.h"
 #include <stdlib.h>
 
 /**
  * @brief global var definition
  */
 uint8_t g_buf[256];        /**< uart buffer */
-uint16_t g_len;            /**< uart buffer length */
-uint8_t g_flag;            /**< interrupt flag */
+volatile uint16_t g_len;   /**< uart buffer length */
+volatile uint8_t g_flag;   /**< interrupt flag */
 
 /**
  * @brief exti 0 irq
@@ -88,229 +89,250 @@ void HAL_GPIO_EXTI_Callback(uint16_t pin)
  */
 uint8_t max30205(uint8_t argc, char **argv)
 {
+    int c;
+    int longindex = 0;
+    const char short_options[] = "hipe:t:";
+    const struct option long_options[] =
+    {
+        {"help", no_argument, NULL, 'h'},
+        {"information", no_argument, NULL, 'i'},
+        {"port", no_argument, NULL, 'p'},
+        {"example", required_argument, NULL, 'e'},
+        {"test", required_argument, NULL, 't'},
+        {"addr", required_argument, NULL, 1},
+        {"high-threshold", required_argument, NULL, 2},
+        {"low-threshold", required_argument, NULL, 3},
+        {"mode", required_argument, NULL, 4},
+        {"times", required_argument, NULL, 5},
+        {NULL, 0, NULL, 0},
+    };
+    char type[32] = "unknow";
+    uint32_t times = 3;
+    max30205_address_t addr = MAX30205_ADDRESS_0;
+    max30205_interrupt_mode_t mode = MAX30205_INTERRUPT_MODE_COMPARATOR;
+    float high_threshold = 39.0f;
+    float low_threshold = 35.0f;
+    
+    /* if no params */
     if (argc == 1)
     {
+        /* goto the help */
         goto help;
     }
-    else if (argc == 2)
+    
+    /* init 0 */
+    optind = 0;
+    
+    /* parse */
+    do
     {
-        if (strcmp("-i", argv[1]) == 0)
+        /* parse the args */
+        c = getopt_long(argc, argv, short_options, long_options, &longindex);
+        
+        /* judge the result */
+        switch (c)
         {
-            max30205_info_t info;
-            
-            /* print max30205 info */
-            max30205_info(&info);
-            max30205_interface_debug_print("max30205: chip is %s.\n", info.chip_name);
-            max30205_interface_debug_print("max30205: manufacturer is %s.\n", info.manufacturer_name);
-            max30205_interface_debug_print("max30205: interface is %s.\n", info.interface);
-            max30205_interface_debug_print("max30205: driver version is %d.%d.\n", info.driver_version/1000, (info.driver_version%1000)/100);
-            max30205_interface_debug_print("max30205: min supply voltage is %0.1fV.\n", info.supply_voltage_min_v);
-            max30205_interface_debug_print("max30205: max supply voltage is %0.1fV.\n", info.supply_voltage_max_v);
-            max30205_interface_debug_print("max30205: max current is %0.2fmA.\n", info.max_current_ma);
-            max30205_interface_debug_print("max30205: max temperature is %0.1fC.\n", info.temperature_max);
-            max30205_interface_debug_print("max30205: min temperature is %0.1fC.\n", info.temperature_min);
-            
-            return 0;
-        }
-        else if (strcmp("-p", argv[1]) == 0)
-        {
-            /* print pin connection */
-            max30205_interface_debug_print("max30205: SCL connected to GPIOB PIN8.\n");
-            max30205_interface_debug_print("max30205: SDA connected to GPIOB PIN9.\n");
-            max30205_interface_debug_print("max30205: OS connected to GPIOB PIN0.\n");
-            
-            return 0;
-        }
-        else if (strcmp("-h", argv[1]) == 0)
-        {
-            /* show max30205 help */
-            
-            help:
-            
-            max30205_interface_debug_print("max30205 -i\n\tshow max30205 chip and driver information.\n");
-            max30205_interface_debug_print("max30205 -h\n\tshow max30205 help.\n");
-            max30205_interface_debug_print("max30205 -p\n\tshow max30205 pin connections of the current board.\n");
-            max30205_interface_debug_print("max30205 -t reg -a <address>\n\trun max30205 register test.address means iic address and it can be \"00\"-\"1F\".\n");
-            max30205_interface_debug_print("max30205 -t read <times> -a <address>\n\trun max30205 read test.times means test times."
-                                           "address means iic address and it can be \"00\"-\"1F\".\n");
-            max30205_interface_debug_print("max30205 -t int <times> -a <address> -m (INT | CMP) -th <lowthreshold> <highthreshold>\n\t"
-                                           "run max30205 interrupt test.times means test times.address means iic address and it can be \"00\"-\"1F\".");
-            max30205_interface_debug_print("lowthreshold means interrupt low threshold.highthreshold means interrupt high threshold.\n");
-            max30205_interface_debug_print("max30205 -c read <times> -a <address>\n\trun max30205 read function.times means read times."
-                                           "address means iic address and it can be \"00\"-\"1F\".\n");
-            max30205_interface_debug_print("max30205 -c shot <times> -a <address>\n\trun max30205 shot function.times means read times."
-                                           "address means iic address and it can be \"00\"-\"1F\".\n");
-            max30205_interface_debug_print("max30205 -c int <times> -a <address> -m (INT | CMP) -th <lowthreshold> <highthreshold>\n\t"
-                                           "run max30205 interrupt function.times means read times.address means iic address and it can be \"00\"-\"1F\".");
-            max30205_interface_debug_print("lowthreshold means interrupt low threshold.highthreshold means interrupt high threshold.\n");
-            
-            return 0;
-        }
-        else
-        {
-            return 5;
-        }
-    }
-    else if (argc == 5)
-    {
-        /* run test */
-        if (strcmp("-t", argv[1]) == 0)
-        {
-            /* reg test */
-            if (strcmp("reg", argv[2]) == 0)
+            /* help */
+            case 'h' :
             {
-                uint8_t addr;
+                /* set the type */
+                memset(type, 0, sizeof(char) * 32);
+                snprintf(type, 32, "h");
                 
-                /* check iic address */
-                if (strcmp("-a", argv[3]) != 0)
+                break;
+            }
+            
+            /* information */
+            case 'i' :
+            {
+                /* set the type */
+                memset(type, 0, sizeof(char) * 32);
+                snprintf(type, 32, "i");
+                
+                break;
+            }
+            
+            /* port */
+            case 'p' :
+            {
+                /* set the type */
+                memset(type, 0, sizeof(char) * 32);
+                snprintf(type, 32, "p");
+                
+                break;
+            }
+            
+            /* example */
+            case 'e' :
+            {
+                /* set the type */
+                memset(type, 0, sizeof(char) * 32);
+                snprintf(type, 32, "e_%s", optarg);
+                
+                break;
+            }
+            
+            /* test */
+            case 't' :
+            {
+                /* set the type */
+                memset(type, 0, sizeof(char) * 32);
+                snprintf(type, 32, "t_%s", optarg);
+                
+                break;
+            }
+            
+            /* addr */
+            case 1 :
+            {
+                uint8_t addr_pin;
+                
+                /* set the addr pin */
+                if (strlen(optarg) < 2)
                 {
                     return 5;
                 }
-                if (strlen(argv[4]) < 2)
+                if ((optarg[0] <= '9') && (optarg[0] >= '0'))
                 {
-                    return 5;
-                }
-                if ((argv[4][0] <= '9') && (argv[4][0] >= '0'))
-                {
-                    addr = (argv[4][0] - '0') * 16;
+                    addr_pin = (optarg[0] - '0') * 16;
                 }
                 else
                 {
-                    addr = (argv[4][0] - 'A' + 10) * 16;
+                    addr_pin = (optarg[0] - 'A' + 10) * 16;
                 }
-                if ((argv[4][1] <= '9') && (argv[4][1] >= '0'))
+                if ((optarg[1] <= '9') && (optarg[1] >= '0'))
                 {
-                    addr += argv[4][1] - '0';
+                    addr_pin += optarg[1] - '0';
                 }
                 else
                 {
-                    addr += argv[4][1] - 'A' + 10;
+                    addr_pin += optarg[1] - 'A' + 10;
                 }
-                if (addr == 0)
+                if (addr_pin == 0)
                 {
                     addr = MAX30205_ADDRESS_0;
                 }
-                else if (addr == 1)
+                else if (addr_pin == 1)
                 {
                     addr = MAX30205_ADDRESS_1;
                 }
-                else if (addr == 2)
+                else if (addr_pin == 2)
                 {
                     addr = MAX30205_ADDRESS_2;
                 }
-                else if (addr == 3)
+                else if (addr_pin == 3)
                 {
                     addr = MAX30205_ADDRESS_3;
                 }
-                else if (addr == 4)
+                else if (addr_pin == 4)
                 {
                     addr = MAX30205_ADDRESS_4;
                 }
-                else if (addr == 5)
+                else if (addr_pin == 5)
                 {
                     addr = MAX30205_ADDRESS_5;
                 }
-                else if (addr == 6)
+                else if (addr_pin == 6)
                 {
                     addr = MAX30205_ADDRESS_6;
                 }
-                else if (addr == 7)
+                else if (addr_pin == 7)
                 {
                     addr = MAX30205_ADDRESS_7;
                 }
-                else if (addr == 8)
+                else if (addr_pin == 8)
                 {
                     addr = MAX30205_ADDRESS_8;
                 }
-                else if (addr == 9)
+                else if (addr_pin == 9)
                 {
                     addr = MAX30205_ADDRESS_9;
                 }
-                else if (addr == 10)
+                else if (addr_pin == 10)
                 {
                     addr = MAX30205_ADDRESS_A;
                 }
-                else if (addr == 11)
+                else if (addr_pin == 11)
                 {
                     addr = MAX30205_ADDRESS_B;
                 }
-                else if (addr == 12)
+                else if (addr_pin == 12)
                 {
                     addr = MAX30205_ADDRESS_C;
                 }
-                else if (addr == 13)
+                else if (addr_pin == 13)
                 {
                     addr = MAX30205_ADDRESS_D;
                 }
-                else if (addr == 14)
+                else if (addr_pin == 14)
                 {
                     addr = MAX30205_ADDRESS_E;
                 }
-                else if (addr == 15)
+                else if (addr_pin == 15)
                 {
                     addr = MAX30205_ADDRESS_F;
                 }
-                else if (addr == 16)
+                else if (addr_pin == 16)
                 {
                     addr = MAX30205_ADDRESS_10;
                 }
-                else if (addr == 17)
+                else if (addr_pin == 17)
                 {
                     addr = MAX30205_ADDRESS_11;
                 }
-                else if (addr == 18)
+                else if (addr_pin == 18)
                 {
                     addr = MAX30205_ADDRESS_12;
                 }
-                else if (addr == 19)
+                else if (addr_pin == 19)
                 {
                     addr = MAX30205_ADDRESS_13;
                 }
-                else if (addr == 20)
+                else if (addr_pin == 20)
                 {
                     addr = MAX30205_ADDRESS_14;
                 }
-                else if (addr == 21)
+                else if (addr_pin == 21)
                 {
                     addr = MAX30205_ADDRESS_15;
                 }
-                else if (addr == 22)
+                else if (addr_pin == 22)
                 {
                     addr = MAX30205_ADDRESS_16;
                 }
-                else if (addr == 23)
+                else if (addr_pin == 23)
                 {
                     addr = MAX30205_ADDRESS_17;
                 }
-                else if (addr == 24)
+                else if (addr_pin == 24)
                 {
                     addr = MAX30205_ADDRESS_18;
                 }
-                else if (addr == 25)
+                else if (addr_pin == 25)
                 {
                     addr = MAX30205_ADDRESS_19;
                 }
-                else if (addr == 26)
+                else if (addr_pin == 26)
                 {
                     addr = MAX30205_ADDRESS_1A;
                 }
-                else if (addr == 27)
+                else if (addr_pin == 27)
                 {
                     addr = MAX30205_ADDRESS_1B;
                 }
-                else if (addr == 28)
+                else if (addr_pin == 28)
                 {
                     addr = MAX30205_ADDRESS_1C;
                 }
-                else if (addr == 29)
+                else if (addr_pin == 29)
                 {
                     addr = MAX30205_ADDRESS_1D;
                 }
-                else if (addr == 30)
+                else if (addr_pin == 30)
                 {
                     addr = MAX30205_ADDRESS_1E;
                 }
-                else if (addr == 31)
+                else if (addr_pin == 31)
                 {
                     addr = MAX30205_ADDRESS_1F;
                 }
@@ -318,1065 +340,312 @@ uint8_t max30205(uint8_t argc, char **argv)
                 {
                     return 5;
                 }
-                /* run reg test */
-                if (max30205_register_test((max30205_address_t)(addr)) != 0)
+                
+                break;
+            }
+            
+            /* high threshold */
+            case 2 :
+            {
+                high_threshold = atof(optarg);
+                
+                break;
+            }
+             
+            /* low threshold */
+            case 3 :
+            {
+                low_threshold = atof(optarg);
+                
+                break;
+            }
+            
+            /* mode */
+            case 4 :
+            {
+                /* set the mode */
+                if (strcmp("CMP", optarg) == 0)
                 {
-                    return 1;
+                    mode = MAX30205_INTERRUPT_MODE_COMPARATOR;
+                }
+                else if (strcmp("INT", optarg) == 0)
+                {
+                    mode = MAX30205_INTERRUPT_MODE_INTERRUPT;
                 }
                 else
                 {
-                    return 0;
+                    return 5;
                 }
+                
+                break;
             }
-            /* param is invalid */
-            else
+            
+            /* running times */
+            case 5 :
+            {
+                /* set the times */
+                times = atol(optarg);
+                
+                break;
+            } 
+            
+            /* the end */
+            case -1 :
+            {
+                break;
+            }
+            
+            /* others */
+            default :
             {
                 return 5;
             }
         }
-        /* param is invalid */
+    } while (c != -1);
+
+    /* run the function */
+    if (strcmp("t_reg", type) == 0)
+    {
+        /* run reg test */
+        if (max30205_register_test(addr) != 0)
+        {
+            return 1;
+        }
         else
         {
-            return 5;
+            return 0;
         }
     }
-    else if (argc == 6)
+    else if (strcmp("t_read", type) == 0)
     {
-        /* run test */
-        if (strcmp("-t", argv[1]) == 0)
+        /* run read test */
+        if (max30205_read_test(addr, times) != 0)
         {
-            /* read test */
-            if (strcmp("read", argv[2]) == 0)
-            {
-                uint8_t addr;
-                
-                /* check iic address */
-                if (strcmp("-a", argv[4]) != 0)
-                {
-                    return 5;
-                }
-                if (strlen(argv[5]) < 2)
-                {
-                    return 5;
-                }
-                if ((argv[5][0] <= '9') && (argv[5][0] >= '0'))
-                {
-                    addr = (argv[5][0] - '0') * 16;
-                }
-                else
-                {
-                    addr = (argv[5][0] - 'A' + 10) * 16;
-                }
-                if ((argv[5][1] <= '9') && (argv[5][1] >= '0'))
-                {
-                    addr += argv[5][1] - '0';
-                }
-                else
-                {
-                    addr += argv[5][1] - 'A' + 10;
-                }
-                if (addr == 0)
-                {
-                    addr = MAX30205_ADDRESS_0;
-                }
-                else if (addr == 1)
-                {
-                    addr = MAX30205_ADDRESS_1;
-                }
-                else if (addr == 2)
-                {
-                    addr = MAX30205_ADDRESS_2;
-                }
-                else if (addr == 3)
-                {
-                    addr = MAX30205_ADDRESS_3;
-                }
-                else if (addr == 4)
-                {
-                    addr = MAX30205_ADDRESS_4;
-                }
-                else if (addr == 5)
-                {
-                    addr = MAX30205_ADDRESS_5;
-                }
-                else if (addr == 6)
-                {
-                    addr = MAX30205_ADDRESS_6;
-                }
-                else if (addr == 7)
-                {
-                    addr = MAX30205_ADDRESS_7;
-                }
-                else if (addr == 8)
-                {
-                    addr = MAX30205_ADDRESS_8;
-                }
-                else if (addr == 9)
-                {
-                    addr = MAX30205_ADDRESS_9;
-                }
-                else if (addr == 10)
-                {
-                    addr = MAX30205_ADDRESS_A;
-                }
-                else if (addr == 11)
-                {
-                    addr = MAX30205_ADDRESS_B;
-                }
-                else if (addr == 12)
-                {
-                    addr = MAX30205_ADDRESS_C;
-                }
-                else if (addr == 13)
-                {
-                    addr = MAX30205_ADDRESS_D;
-                }
-                else if (addr == 14)
-                {
-                    addr = MAX30205_ADDRESS_E;
-                }
-                else if (addr == 15)
-                {
-                    addr = MAX30205_ADDRESS_F;
-                }
-                else if (addr == 16)
-                {
-                    addr = MAX30205_ADDRESS_10;
-                }
-                else if (addr == 17)
-                {
-                    addr = MAX30205_ADDRESS_11;
-                }
-                else if (addr == 18)
-                {
-                    addr = MAX30205_ADDRESS_12;
-                }
-                else if (addr == 19)
-                {
-                    addr = MAX30205_ADDRESS_13;
-                }
-                else if (addr == 20)
-                {
-                    addr = MAX30205_ADDRESS_14;
-                }
-                else if (addr == 21)
-                {
-                    addr = MAX30205_ADDRESS_15;
-                }
-                else if (addr == 22)
-                {
-                    addr = MAX30205_ADDRESS_16;
-                }
-                else if (addr == 23)
-                {
-                    addr = MAX30205_ADDRESS_17;
-                }
-                else if (addr == 24)
-                {
-                    addr = MAX30205_ADDRESS_18;
-                }
-                else if (addr == 25)
-                {
-                    addr = MAX30205_ADDRESS_19;
-                }
-                else if (addr == 26)
-                {
-                    addr = MAX30205_ADDRESS_1A;
-                }
-                else if (addr == 27)
-                {
-                    addr = MAX30205_ADDRESS_1B;
-                }
-                else if (addr == 28)
-                {
-                    addr = MAX30205_ADDRESS_1C;
-                }
-                else if (addr == 29)
-                {
-                    addr = MAX30205_ADDRESS_1D;
-                }
-                else if (addr == 30)
-                {
-                    addr = MAX30205_ADDRESS_1E;
-                }
-                else if (addr == 31)
-                {
-                    addr = MAX30205_ADDRESS_1F;
-                }
-                else
-                {
-                    return 5;
-                }
-                /* run read test */
-                if (max30205_read_test((max30205_address_t)(addr), atoi(argv[3])) != 0)
-                {
-                    return 1;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-            /* param is invalid */
-            else
-            {
-                return 5;
-            }
+            return 1;
         }
-        /* run function */
-        else if (strcmp("-c", argv[1]) == 0)
+        else
         {
-             /* read function */
-            if (strcmp("read", argv[2]) == 0)
+            return 0;
+        }
+    }
+    else if (strcmp("t_int", type) == 0)
+    {
+        uint8_t res;
+        
+        /* gpio init */
+        res = gpio_interrupt_init();
+        if (res != 0)
+        {
+            return 1;
+        }
+        
+        /* run interrupt test */
+        res = max30205_interrupt_test(addr, mode, low_threshold, high_threshold, times);
+        if (res != 0)
+        {
+            (void)gpio_interrupt_deinit();
+            
+            return 1;
+        }
+        
+        /* gpio deinit */
+        (void)gpio_interrupt_deinit();
+        
+        return 0;
+    }
+    else if (strcmp("e_read", type) == 0)
+    {
+        uint8_t res;
+        uint32_t i;
+        float s;
+
+        /* basic init */
+        res = max30205_basic_init(addr);
+        if (res != 0)
+        {
+            return 1;
+        }
+        
+        /* loop */
+        for (i = 0; i < times; i++)
+        {
+            /* delay 1000ms */
+            max30205_interface_delay_ms(1000);
+            
+            /* read data */
+            res = max30205_basic_read((float *)&s);
+            if (res != 0)
             {
-                uint8_t res;
-                uint32_t times;
-                uint32_t i;
-                uint8_t addr;
-                float s;
-                
-                /* check iic address */
-                if (strcmp("-a", argv[4]) != 0)
-                {
-                    return 5;
-                }
-                if (strlen(argv[5]) < 2)
-                {
-                    return 5;
-                }
-                if ((argv[5][0] <= '9') && (argv[5][0] >= '0'))
-                {
-                    addr = (argv[5][0] - '0') * 16;
-                }
-                else
-                {
-                    addr = (argv[5][0] - 'A' + 10) * 16;
-                }
-                if ((argv[5][1] <= '9') && (argv[5][1] >= '0'))
-                {
-                    addr += argv[5][1] - '0';
-                }
-                else
-                {
-                    addr += argv[5][1] - 'A' + 10;
-                }
-                if (addr == 0)
-                {
-                    addr = MAX30205_ADDRESS_0;
-                }
-                else if (addr == 1)
-                {
-                    addr = MAX30205_ADDRESS_1;
-                }
-                else if (addr == 2)
-                {
-                    addr = MAX30205_ADDRESS_2;
-                }
-                else if (addr == 3)
-                {
-                    addr = MAX30205_ADDRESS_3;
-                }
-                else if (addr == 4)
-                {
-                    addr = MAX30205_ADDRESS_4;
-                }
-                else if (addr == 5)
-                {
-                    addr = MAX30205_ADDRESS_5;
-                }
-                else if (addr == 6)
-                {
-                    addr = MAX30205_ADDRESS_6;
-                }
-                else if (addr == 7)
-                {
-                    addr = MAX30205_ADDRESS_7;
-                }
-                else if (addr == 8)
-                {
-                    addr = MAX30205_ADDRESS_8;
-                }
-                else if (addr == 9)
-                {
-                    addr = MAX30205_ADDRESS_9;
-                }
-                else if (addr == 10)
-                {
-                    addr = MAX30205_ADDRESS_A;
-                }
-                else if (addr == 11)
-                {
-                    addr = MAX30205_ADDRESS_B;
-                }
-                else if (addr == 12)
-                {
-                    addr = MAX30205_ADDRESS_C;
-                }
-                else if (addr == 13)
-                {
-                    addr = MAX30205_ADDRESS_D;
-                }
-                else if (addr == 14)
-                {
-                    addr = MAX30205_ADDRESS_E;
-                }
-                else if (addr == 15)
-                {
-                    addr = MAX30205_ADDRESS_F;
-                }
-                else if (addr == 16)
-                {
-                    addr = MAX30205_ADDRESS_10;
-                }
-                else if (addr == 17)
-                {
-                    addr = MAX30205_ADDRESS_11;
-                }
-                else if (addr == 18)
-                {
-                    addr = MAX30205_ADDRESS_12;
-                }
-                else if (addr == 19)
-                {
-                    addr = MAX30205_ADDRESS_13;
-                }
-                else if (addr == 20)
-                {
-                    addr = MAX30205_ADDRESS_14;
-                }
-                else if (addr == 21)
-                {
-                    addr = MAX30205_ADDRESS_15;
-                }
-                else if (addr == 22)
-                {
-                    addr = MAX30205_ADDRESS_16;
-                }
-                else if (addr == 23)
-                {
-                    addr = MAX30205_ADDRESS_17;
-                }
-                else if (addr == 24)
-                {
-                    addr = MAX30205_ADDRESS_18;
-                }
-                else if (addr == 25)
-                {
-                    addr = MAX30205_ADDRESS_19;
-                }
-                else if (addr == 26)
-                {
-                    addr = MAX30205_ADDRESS_1A;
-                }
-                else if (addr == 27)
-                {
-                    addr = MAX30205_ADDRESS_1B;
-                }
-                else if (addr == 28)
-                {
-                    addr = MAX30205_ADDRESS_1C;
-                }
-                else if (addr == 29)
-                {
-                    addr = MAX30205_ADDRESS_1D;
-                }
-                else if (addr == 30)
-                {
-                    addr = MAX30205_ADDRESS_1E;
-                }
-                else if (addr == 31)
-                {
-                    addr = MAX30205_ADDRESS_1F;
-                }
-                else
-                {
-                    return 5;
-                }
-                
-                res = max30205_basic_init((max30205_address_t)(addr));
-                if (res != 0)
-                {
-                    return 1;
-                }
-                times = atoi(argv[3]);
-                for (i = 0; i < times; i++)
-                {
-                    max30205_interface_delay_ms(1000);
-                    res = max30205_basic_read((float *)&s);
-                    if (res != 0)
-                    {
-                        (void)max30205_basic_deinit();
-                        
-                        return 1;
-                    }
-                    max30205_interface_debug_print("max30205: %d/%d.\n", (uint32_t)(i+1), (uint32_t)times);
-                    max30205_interface_debug_print("max30205: temperature is %0.3fC.\n", s);
-                }
                 (void)max30205_basic_deinit();
                 
-                return 0;
+                return 1;
             }
-            /* shot function */
-            else if (strcmp("shot", argv[2]) == 0)
+            
+            /* output */
+            max30205_interface_debug_print("max30205: %d/%d.\n", (uint32_t)(i + 1), (uint32_t)times);
+            max30205_interface_debug_print("max30205: temperature is %0.3fC.\n", s);
+        }
+        
+        /* basic deinit */
+        (void)max30205_basic_deinit();
+        
+        return 0;
+    }
+    else if (strcmp("e_shot", type) == 0)
+    {
+        uint8_t res;
+        uint32_t i;
+        float s;
+        
+        /* shot init */
+        res = max30205_shot_init(addr);
+        if (res != 0)
+        {
+            return 1;
+        }
+        
+        /* loop */
+        for (i = 0; i < times; i++)
+        {
+            /* delay 1000ms */
+            max30205_interface_delay_ms(1000);
+            
+            /* read data */
+            res = max30205_shot_read((float *)&s);
+            if (res != 0)
             {
-                uint8_t res;
-                uint32_t times;
-                uint32_t i;
-                uint8_t addr;
-                float s;
-                
-                /* check iic address */
-                if (strcmp("-a", argv[4]) != 0)
-                {
-                    return 5;
-                }
-                if (strlen(argv[5]) < 2)
-                {
-                    return 5;
-                }
-                if ((argv[5][0] <= '9') && (argv[5][0] >= '0'))
-                {
-                    addr = (argv[5][0] - '0') * 16;
-                }
-                else
-                {
-                    addr = (argv[5][0] - 'A' + 10) * 16;
-                }
-                if ((argv[5][1] <= '9') && (argv[5][1] >= '0'))
-                {
-                    addr += argv[5][1] - '0';
-                }
-                else
-                {
-                    addr += argv[5][1] - 'A' + 10;
-                }
-                if (addr == 0)
-                {
-                    addr = MAX30205_ADDRESS_0;
-                }
-                else if (addr == 1)
-                {
-                    addr = MAX30205_ADDRESS_1;
-                }
-                else if (addr == 2)
-                {
-                    addr = MAX30205_ADDRESS_2;
-                }
-                else if (addr == 3)
-                {
-                    addr = MAX30205_ADDRESS_3;
-                }
-                else if (addr == 4)
-                {
-                    addr = MAX30205_ADDRESS_4;
-                }
-                else if (addr == 5)
-                {
-                    addr = MAX30205_ADDRESS_5;
-                }
-                else if (addr == 6)
-                {
-                    addr = MAX30205_ADDRESS_6;
-                }
-                else if (addr == 7)
-                {
-                    addr = MAX30205_ADDRESS_7;
-                }
-                else if (addr == 8)
-                {
-                    addr = MAX30205_ADDRESS_8;
-                }
-                else if (addr == 9)
-                {
-                    addr = MAX30205_ADDRESS_9;
-                }
-                else if (addr == 10)
-                {
-                    addr = MAX30205_ADDRESS_A;
-                }
-                else if (addr == 11)
-                {
-                    addr = MAX30205_ADDRESS_B;
-                }
-                else if (addr == 12)
-                {
-                    addr = MAX30205_ADDRESS_C;
-                }
-                else if (addr == 13)
-                {
-                    addr = MAX30205_ADDRESS_D;
-                }
-                else if (addr == 14)
-                {
-                    addr = MAX30205_ADDRESS_E;
-                }
-                else if (addr == 15)
-                {
-                    addr = MAX30205_ADDRESS_F;
-                }
-                else if (addr == 16)
-                {
-                    addr = MAX30205_ADDRESS_10;
-                }
-                else if (addr == 17)
-                {
-                    addr = MAX30205_ADDRESS_11;
-                }
-                else if (addr == 18)
-                {
-                    addr = MAX30205_ADDRESS_12;
-                }
-                else if (addr == 19)
-                {
-                    addr = MAX30205_ADDRESS_13;
-                }
-                else if (addr == 20)
-                {
-                    addr = MAX30205_ADDRESS_14;
-                }
-                else if (addr == 21)
-                {
-                    addr = MAX30205_ADDRESS_15;
-                }
-                else if (addr == 22)
-                {
-                    addr = MAX30205_ADDRESS_16;
-                }
-                else if (addr == 23)
-                {
-                    addr = MAX30205_ADDRESS_17;
-                }
-                else if (addr == 24)
-                {
-                    addr = MAX30205_ADDRESS_18;
-                }
-                else if (addr == 25)
-                {
-                    addr = MAX30205_ADDRESS_19;
-                }
-                else if (addr == 26)
-                {
-                    addr = MAX30205_ADDRESS_1A;
-                }
-                else if (addr == 27)
-                {
-                    addr = MAX30205_ADDRESS_1B;
-                }
-                else if (addr == 28)
-                {
-                    addr = MAX30205_ADDRESS_1C;
-                }
-                else if (addr == 29)
-                {
-                    addr = MAX30205_ADDRESS_1D;
-                }
-                else if (addr == 30)
-                {
-                    addr = MAX30205_ADDRESS_1E;
-                }
-                else if (addr == 31)
-                {
-                    addr = MAX30205_ADDRESS_1F;
-                }
-                else
-                {
-                    return 5;
-                }
-                
-                res = max30205_shot_init((max30205_address_t)(addr));
-                if (res != 0)
-                {
-                    return 1;
-                }
-                times = atoi(argv[3]);
-                for (i = 0; i < times; i++)
-                {
-                    max30205_interface_delay_ms(1000);
-                    res = max30205_shot_read((float *)&s);
-                    if (res != 0)
-                    {
-                        (void)max30205_shot_deinit();
-                        
-                        return 1;
-                    }
-                    max30205_interface_debug_print("max30205: %d/%d.\n", (uint32_t)(i+1), (uint32_t)times);
-                    max30205_interface_debug_print("max30205: temperature is %0.3fC.\n", s);
-                }
                 (void)max30205_shot_deinit();
                 
-                return 0;
+                return 1;
             }
-            /* param is invalid */
-            else
-            {
-                return 5;
-            }
+            
+            /* output */
+            max30205_interface_debug_print("max30205: %d/%d.\n", (uint32_t)(i + 1), (uint32_t)times);
+            max30205_interface_debug_print("max30205: temperature is %0.3fC.\n", s);
         }
-        /* param is invalid */
-        else
-        {
-            return 5;
-        }
+        
+        /* shot deinit */
+        (void)max30205_shot_deinit();
+        
+        return 0;
     }
-    else if (argc == 11)
+    else if (strcmp("e_int", type) == 0)
     {
-        /* run test */
-        if (strcmp("-t", argv[1]) == 0)
+        uint8_t res;
+        uint32_t i;
+        float s;
+        
+        /* gpio init */
+        res = gpio_interrupt_init();
+        if (res != 0)
         {
-            /* int test */
-            if (strcmp("int", argv[2]) == 0)
-            {
-                uint8_t res;
-                uint32_t times;
-                uint8_t addr;
-                max30205_interrupt_mode_t mode;
-                
-                /* check iic address */
-                if (strcmp("-a", argv[4]) != 0)
-                {
-                    return 5;
-                }
-                if (strlen(argv[5]) < 2)
-                {
-                    return 5;
-                }
-                if (strcmp("-m", argv[6]) != 0)
-                {
-                    return 5;
-                }
-                if (strcmp("CMP", argv[7]) == 0)
-                {
-                    mode = MAX30205_INTERRUPT_MODE_COMPARATOR;
-                }
-                else if (strcmp("INT", argv[7]) == 0)
-                {
-                    mode = MAX30205_INTERRUPT_MODE_INTERRUPT;
-                }
-                else
-                {
-                    max30205_interface_debug_print("max30205: mode is invalid.\n");
-                    
-                    return 5;
-                }
-                if (strcmp("-th", argv[8]) != 0)
-                {
-                    return 5;
-                }
-                if ((argv[5][0] <= '9') && (argv[5][0] >= '0'))
-                {
-                    addr = (argv[5][0] - '0') * 16;
-                }
-                else
-                {
-                    addr = (argv[5][0] - 'A' + 10) * 16;
-                }
-                if ((argv[5][1] <= '9') && (argv[5][1] >= '0'))
-                {
-                    addr += argv[5][1] - '0';
-                }
-                else
-                {
-                    addr += argv[5][1] - 'A' + 10;
-                }
-                if (addr == 0)
-                {
-                    addr = MAX30205_ADDRESS_0;
-                }
-                else if (addr == 1)
-                {
-                    addr = MAX30205_ADDRESS_1;
-                }
-                else if (addr == 2)
-                {
-                    addr = MAX30205_ADDRESS_2;
-                }
-                else if (addr == 3)
-                {
-                    addr = MAX30205_ADDRESS_3;
-                }
-                else if (addr == 4)
-                {
-                    addr = MAX30205_ADDRESS_4;
-                }
-                else if (addr == 5)
-                {
-                    addr = MAX30205_ADDRESS_5;
-                }
-                else if (addr == 6)
-                {
-                    addr = MAX30205_ADDRESS_6;
-                }
-                else if (addr == 7)
-                {
-                    addr = MAX30205_ADDRESS_7;
-                }
-                else if (addr == 8)
-                {
-                    addr = MAX30205_ADDRESS_8;
-                }
-                else if (addr == 9)
-                {
-                    addr = MAX30205_ADDRESS_9;
-                }
-                else if (addr == 10)
-                {
-                    addr = MAX30205_ADDRESS_A;
-                }
-                else if (addr == 11)
-                {
-                    addr = MAX30205_ADDRESS_B;
-                }
-                else if (addr == 12)
-                {
-                    addr = MAX30205_ADDRESS_C;
-                }
-                else if (addr == 13)
-                {
-                    addr = MAX30205_ADDRESS_D;
-                }
-                else if (addr == 14)
-                {
-                    addr = MAX30205_ADDRESS_E;
-                }
-                else if (addr == 15)
-                {
-                    addr = MAX30205_ADDRESS_F;
-                }
-                else if (addr == 16)
-                {
-                    addr = MAX30205_ADDRESS_10;
-                }
-                else if (addr == 17)
-                {
-                    addr = MAX30205_ADDRESS_11;
-                }
-                else if (addr == 18)
-                {
-                    addr = MAX30205_ADDRESS_12;
-                }
-                else if (addr == 19)
-                {
-                    addr = MAX30205_ADDRESS_13;
-                }
-                else if (addr == 20)
-                {
-                    addr = MAX30205_ADDRESS_14;
-                }
-                else if (addr == 21)
-                {
-                    addr = MAX30205_ADDRESS_15;
-                }
-                else if (addr == 22)
-                {
-                    addr = MAX30205_ADDRESS_16;
-                }
-                else if (addr == 23)
-                {
-                    addr = MAX30205_ADDRESS_17;
-                }
-                else if (addr == 24)
-                {
-                    addr = MAX30205_ADDRESS_18;
-                }
-                else if (addr == 25)
-                {
-                    addr = MAX30205_ADDRESS_19;
-                }
-                else if (addr == 26)
-                {
-                    addr = MAX30205_ADDRESS_1A;
-                }
-                else if (addr == 27)
-                {
-                    addr = MAX30205_ADDRESS_1B;
-                }
-                else if (addr == 28)
-                {
-                    addr = MAX30205_ADDRESS_1C;
-                }
-                else if (addr == 29)
-                {
-                    addr = MAX30205_ADDRESS_1D;
-                }
-                else if (addr == 30)
-                {
-                    addr = MAX30205_ADDRESS_1E;
-                }
-                else if (addr == 31)
-                {
-                    addr = MAX30205_ADDRESS_1F;
-                }
-                else
-                {
-                    return 5;
-                }
-                times = atoi(argv[3]);
-                res = gpio_interrupt_init();
-                if (res != 0)
-                {
-                    return 1;
-                }
-                res = max30205_interrupt_test((max30205_address_t)(addr), mode, (float)atof(argv[9]),(float)atof(argv[10]), times);
-                if (res != 0)
-                {
-                    (void)gpio_interrupt_deinit();
-                    
-                    return 1;
-                }
-                (void)gpio_interrupt_deinit();
-                
-                return 0;
-            }
-            /* param is invalid */
-            else
-            {
-                return 5;
-            }
+            return 1;
         }
-        /* run function */
-        else if (strcmp("-c", argv[1]) == 0)
+        
+        /* interrupt init */
+        res = max30205_interrupt_init(addr, mode, low_threshold, high_threshold);
+        if (res != 0)
         {
-            /* int function */
-            if (strcmp("int", argv[2]) == 0)
+            (void)gpio_interrupt_deinit();
+            
+            return 1;
+        }
+        
+        /* loop */
+        g_flag = 0;
+        for (i = 0; i < times; i++)
+        {
+            /* delay 1000ms */
+            max30205_interface_delay_ms(1000);
+            
+            /* read data */
+            res = max30205_interrupt_read((float *)&s); 
+            if (res != 0)
             {
-                uint8_t res;
-                uint32_t times;
-                uint32_t i;
-                uint8_t addr;
-                float s;
-                max30205_interrupt_mode_t mode;
-                
-                /* check iic address */
-                if (strcmp("-a", argv[4]) != 0)
-                {
-                    return 5;
-                }
-                if (strlen(argv[5]) < 2)
-                {
-                    return 5;
-                }
-                if (strcmp("-m", argv[6]) != 0)
-                {
-                    return 5;
-                }
-                if (strcmp("CMP", argv[7]) == 0)
-                {
-                    mode = MAX30205_INTERRUPT_MODE_COMPARATOR;
-                }
-                else if (strcmp("INT", argv[7]) == 0)
-                {
-                    mode = MAX30205_INTERRUPT_MODE_INTERRUPT;
-                }
-                else
-                {
-                    max30205_interface_debug_print("max30205: mode is invalid.\n");
-                    
-                    return 5;
-                }
-                if (strcmp("-th", argv[8]) != 0)
-                {
-                    return 5;
-                }
-                if ((argv[5][0] <= '9') && (argv[5][0] >= '0'))
-                {
-                    addr = (argv[5][0] - '0') * 16;
-                }
-                else
-                {
-                    addr = (argv[5][0] - 'A' + 10) * 16;
-                }
-                if ((argv[5][1] <= '9') && (argv[5][1] >= '0'))
-                {
-                    addr += argv[5][1] - '0';
-                }
-                else
-                {
-                    addr += argv[5][1] - 'A' + 10;
-                }
-                if (addr == 0)
-                {
-                    addr = MAX30205_ADDRESS_0;
-                }
-                else if (addr == 1)
-                {
-                    addr = MAX30205_ADDRESS_1;
-                }
-                else if (addr == 2)
-                {
-                    addr = MAX30205_ADDRESS_2;
-                }
-                else if (addr == 3)
-                {
-                    addr = MAX30205_ADDRESS_3;
-                }
-                else if (addr == 4)
-                {
-                    addr = MAX30205_ADDRESS_4;
-                }
-                else if (addr == 5)
-                {
-                    addr = MAX30205_ADDRESS_5;
-                }
-                else if (addr == 6)
-                {
-                    addr = MAX30205_ADDRESS_6;
-                }
-                else if (addr == 7)
-                {
-                    addr = MAX30205_ADDRESS_7;
-                }
-                else if (addr == 8)
-                {
-                    addr = MAX30205_ADDRESS_8;
-                }
-                else if (addr == 9)
-                {
-                    addr = MAX30205_ADDRESS_9;
-                }
-                else if (addr == 10)
-                {
-                    addr = MAX30205_ADDRESS_A;
-                }
-                else if (addr == 11)
-                {
-                    addr = MAX30205_ADDRESS_B;
-                }
-                else if (addr == 12)
-                {
-                    addr = MAX30205_ADDRESS_C;
-                }
-                else if (addr == 13)
-                {
-                    addr = MAX30205_ADDRESS_D;
-                }
-                else if (addr == 14)
-                {
-                    addr = MAX30205_ADDRESS_E;
-                }
-                else if (addr == 15)
-                {
-                    addr = MAX30205_ADDRESS_F;
-                }
-                else if (addr == 16)
-                {
-                    addr = MAX30205_ADDRESS_10;
-                }
-                else if (addr == 17)
-                {
-                    addr = MAX30205_ADDRESS_11;
-                }
-                else if (addr == 18)
-                {
-                    addr = MAX30205_ADDRESS_12;
-                }
-                else if (addr == 19)
-                {
-                    addr = MAX30205_ADDRESS_13;
-                }
-                else if (addr == 20)
-                {
-                    addr = MAX30205_ADDRESS_14;
-                }
-                else if (addr == 21)
-                {
-                    addr = MAX30205_ADDRESS_15;
-                }
-                else if (addr == 22)
-                {
-                    addr = MAX30205_ADDRESS_16;
-                }
-                else if (addr == 23)
-                {
-                    addr = MAX30205_ADDRESS_17;
-                }
-                else if (addr == 24)
-                {
-                    addr = MAX30205_ADDRESS_18;
-                }
-                else if (addr == 25)
-                {
-                    addr = MAX30205_ADDRESS_19;
-                }
-                else if (addr == 26)
-                {
-                    addr = MAX30205_ADDRESS_1A;
-                }
-                else if (addr == 27)
-                {
-                    addr = MAX30205_ADDRESS_1B;
-                }
-                else if (addr == 28)
-                {
-                    addr = MAX30205_ADDRESS_1C;
-                }
-                else if (addr == 29)
-                {
-                    addr = MAX30205_ADDRESS_1D;
-                }
-                else if (addr == 30)
-                {
-                    addr = MAX30205_ADDRESS_1E;
-                }
-                else if (addr == 31)
-                {
-                    addr = MAX30205_ADDRESS_1F;
-                }
-                else
-                {
-                    return 5;
-                }
-                times = atoi(argv[3]);
-                res = gpio_interrupt_init();
-                if (res != 0)
-                {
-                    return 1;
-                }
-                res = max30205_interrupt_init((max30205_address_t)(addr), mode, (float)atof(argv[9]),(float)atof(argv[10]));
-                if (res != 0)
-                {
-                    (void)gpio_interrupt_deinit();
-                    
-                    return 1;
-                }
-                g_flag = 0;
-                for (i = 0; i < times; i++)
-                {
-                    max30205_interface_delay_ms(1000);
-                    res = max30205_interrupt_read((float *)&s); 
-                    if (res != 0)
-                    {
-                        (void)gpio_interrupt_deinit();
-                        (void)max30205_interrupt_deinit();
-                        
-                        return 1;
-                    }
-                    if (g_flag != 0)
-                    {
-                        max30205_interface_debug_print("max30205: find interrupt.\n");
-                        
-                        break;
-                    }
-                    max30205_interface_debug_print("max30205: %d/%d.\n", (uint32_t)(i+1), (uint32_t)times);
-                    max30205_interface_debug_print("max30205: temperature is %0.3fC.\n", s);
-                }
                 (void)gpio_interrupt_deinit();
                 (void)max30205_interrupt_deinit();
                 
-                return 0;
+                return 1;
             }
-            /* param is invalid */
-            else
+            
+            /* check the flag */
+            if (g_flag != 0)
             {
-                return 5;
+                max30205_interface_debug_print("max30205: find interrupt.\n");
+                
+                break;
             }
+            
+            /* output */
+            max30205_interface_debug_print("max30205: %d/%d.\n", (uint32_t)(i + 1), (uint32_t)times);
+            max30205_interface_debug_print("max30205: temperature is %0.3fC.\n", s);
         }
-        /* param is invalid */
-        else
-        {
-            return 5;
-        }
+        
+        /* deinit */
+        (void)gpio_interrupt_deinit();
+        (void)max30205_interrupt_deinit();
+        
+        return 0;
     }
-    /* param is invalid */
+    else if (strcmp("h", type) == 0)
+    {
+        help:
+        max30205_interface_debug_print("Usage:\n");
+        max30205_interface_debug_print("  max30205 (-i | --information)\n");
+        max30205_interface_debug_print("  max30205 (-h | --help)\n");
+        max30205_interface_debug_print("  max30205 (-p | --port)\n");
+        max30205_interface_debug_print("  max30205 (-t reg | --test=reg) [--addr=<address>]\n");
+        max30205_interface_debug_print("  max30205 (-t read | --test=read) [--addr=<address>] [--times=<num>]\n");
+        max30205_interface_debug_print("  max30205 (-t int | --test=int) [--addr=<address>] [--times=<num>]\n");
+        max30205_interface_debug_print("           [--mode=<INT | CMP>] [--low-threshold=<low>] [--high-threshold=<high>]\n");
+        max30205_interface_debug_print("  max30205 (-e read | --example=read) [--addr=<address>] [--times=<num>]\n");
+        max30205_interface_debug_print("  max30205 (-e shot | --example=shot) [--addr=<address>] [--times=<num>]\n");
+        max30205_interface_debug_print("  max30205 (-e int | --example=int) [--addr=<address>] [--times=<num>]\n");
+        max30205_interface_debug_print("           [--mode=<INT | CMP>] [--low-threshold=<low>] [--high-threshold=<high>]\n");
+        max30205_interface_debug_print("\n");
+        max30205_interface_debug_print("Options:\n");
+        max30205_interface_debug_print("      --addr=<address>           Set the addr pin and it can be \"00\" - \"1F\".([default: 00])\n");
+        max30205_interface_debug_print("  -e <read | shot | int>, --example=<read | shot | int>\n");
+        max30205_interface_debug_print("                                 Run the driver example.\n");
+        max30205_interface_debug_print("  -h, --help                     Show the help.\n");
+        max30205_interface_debug_print("      --high-threshold=<high>    Set the interrupt high threshold.([default: 39.0f])\n");
+        max30205_interface_debug_print("  -i, --information              Show the chip information.\n");
+        max30205_interface_debug_print("      --low-threshold=<low>      Set the interrupt low threshold.([default: 35.0f])\n");
+        max30205_interface_debug_print("      --mode=<INT | CMP>         Set the interrupt mode.([default: CMP])\n");
+        max30205_interface_debug_print("  -p, --port                     Display the pin connections of the current board.\n");
+        max30205_interface_debug_print("  -t <reg | read | int>, --test=<reg | read | int>\n");
+        max30205_interface_debug_print("                                 Run the driver test.\n");
+        max30205_interface_debug_print("      --times=<num>              Set the running times.([default: 3])\n");
+        
+        return 0;
+    }
+    else if (strcmp("i", type) == 0)
+    {
+        max30205_info_t info;
+        
+        /* print max30205 info */
+        max30205_info(&info);
+        max30205_interface_debug_print("max30205: chip is %s.\n", info.chip_name);
+        max30205_interface_debug_print("max30205: manufacturer is %s.\n", info.manufacturer_name);
+        max30205_interface_debug_print("max30205: interface is %s.\n", info.interface);
+        max30205_interface_debug_print("max30205: driver version is %d.%d.\n", info.driver_version / 1000, (info.driver_version % 1000) / 100);
+        max30205_interface_debug_print("max30205: min supply voltage is %0.1fV.\n", info.supply_voltage_min_v);
+        max30205_interface_debug_print("max30205: max supply voltage is %0.1fV.\n", info.supply_voltage_max_v);
+        max30205_interface_debug_print("max30205: max current is %0.2fmA.\n", info.max_current_ma);
+        max30205_interface_debug_print("max30205: max temperature is %0.1fC.\n", info.temperature_max);
+        max30205_interface_debug_print("max30205: min temperature is %0.1fC.\n", info.temperature_min);
+        
+        return 0;
+    }
+    else if (strcmp("p", type) == 0)
+    {
+        /* print pin connection */
+        max30205_interface_debug_print("max30205: SCL connected to GPIOB PIN8.\n");
+        max30205_interface_debug_print("max30205: SDA connected to GPIOB PIN9.\n");
+        max30205_interface_debug_print("max30205: OS connected to GPIOB PIN0.\n");
+        
+        return 0;
+    }
     else
     {
         return 5;
@@ -1397,19 +666,19 @@ int main(void)
     /* delay init */
     delay_init();
     
-    /* uart1 init */
-    uart1_init(115200);
+    /* uart init */
+    uart_init(115200);
     
     /* shell init && register max30205 fuction */
     shell_init();
     shell_register("max30205", max30205);
-    uart1_print("max30205: welcome to libdriver max30205.\n");
+    uart_print("max30205: welcome to libdriver max30205.\n");
     
     while (1)
     {
         /* read uart */
-        g_len = uart1_read(g_buf, 256);
-        if (g_len)
+        g_len = uart_read(g_buf, 256);
+        if (g_len != 0)
         {
             /* run shell */
             res = shell_parse((char *)g_buf, g_len);
@@ -1419,29 +688,29 @@ int main(void)
             }
             else if (res == 1)
             {
-                uart1_print("max30205: run failed.\n");
+                uart_print("max30205: run failed.\n");
             }
             else if (res == 2)
             {
-                uart1_print("max30205: unknow command.\n");
+                uart_print("max30205: unknow command.\n");
             }
             else if (res == 3)
             {
-                uart1_print("max30205: length is too long.\n");
+                uart_print("max30205: length is too long.\n");
             }
             else if (res == 4)
             {
-                uart1_print("max30205: pretreat failed.\n");
+                uart_print("max30205: pretreat failed.\n");
             }
             else if (res == 5)
             {
-                uart1_print("max30205: param is invalid.\n");
+                uart_print("max30205: param is invalid.\n");
             }
             else
             {
-                uart1_print("max30205: unknow status code.\n");
+                uart_print("max30205: unknow status code.\n");
             }
-            uart1_flush();
+            uart_flush();
         }
         delay_ms(100);
     }

@@ -167,10 +167,10 @@ typedef enum
 typedef struct max30205_handle_s
 {
     uint8_t iic_addr;                                                                   /**< iic device address */
-    uint8_t (*iic_init)(void);                                                          /**< point to a iic_init function address */
-    uint8_t (*iic_deinit)(void);                                                        /**< point to a iic_deinit function address */
-    uint8_t (*iic_read)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);         /**< point to a iic_read function address */
-    uint8_t (*iic_write)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);        /**< point to a iic_write function address */
+    uint8_t (*iic_init)(void);                                                          /**< point to an iic_init function address */
+    uint8_t (*iic_deinit)(void);                                                        /**< point to an iic_deinit function address */
+    uint8_t (*iic_read)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);         /**< point to an iic_read function address */
+    uint8_t (*iic_write)(uint8_t addr, uint8_t reg, uint8_t *buf, uint16_t len);        /**< point to an iic_write function address */
     void (*delay_ms)(uint32_t ms);                                                      /**< point to a delay_ms function address */
     void (*debug_print)(const char *const fmt, ...);                                    /**< point to a debug_print function address */
     uint8_t inited;                                                                     /**< inited flag */
@@ -215,7 +215,7 @@ typedef struct max30205_info_s
 /**
  * @brief     link iic_init function
  * @param[in] HANDLE points to a max30205 handle structure
- * @param[in] FUC points to a iic_init function address
+ * @param[in] FUC points to an iic_init function address
  * @note      none
  */
 #define DRIVER_MAX30205_LINK_IIC_INIT(HANDLE, FUC)    (HANDLE)->iic_init = FUC
@@ -223,7 +223,7 @@ typedef struct max30205_info_s
 /**
  * @brief     link iic_deinit function
  * @param[in] HANDLE points to a max30205 handle structure
- * @param[in] FUC points to a iic_deinit function address
+ * @param[in] FUC points to an iic_deinit function address
  * @note      none
  */
 #define DRIVER_MAX30205_LINK_IIC_DEINIT(HANDLE, FUC)  (HANDLE)->iic_deinit = FUC
@@ -231,7 +231,7 @@ typedef struct max30205_info_s
 /**
  * @brief     link iic_read function
  * @param[in] HANDLE points to a max30205 handle structure
- * @param[in] FUC points to a iic_read function address
+ * @param[in] FUC points to an iic_read function address
  * @note      none
  */
 #define DRIVER_MAX30205_LINK_IIC_READ(HANDLE, FUC)    (HANDLE)->iic_read = FUC
@@ -239,7 +239,7 @@ typedef struct max30205_info_s
 /**
  * @brief     link iic_write function
  * @param[in] HANDLE points to a max30205 handle structure
- * @param[in] FUC points to a iic_write function address
+ * @param[in] FUC points to an iic_write function address
  * @note      none
  */
 #define DRIVER_MAX30205_LINK_IIC_WRITE(HANDLE, FUC)   (HANDLE)->iic_write = FUC
@@ -419,7 +419,7 @@ uint8_t max30205_set_bus_timeout(max30205_handle_t *handle, max30205_bus_timeout
 /**
  * @brief      get the iic bus timeout
  * @param[in]  *handle points to a max30205 handle structure
- * @param[out] bus_timeout points to a iic bus timeout buffer
+ * @param[out] bus_timeout points to an iic bus timeout buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -466,7 +466,7 @@ uint8_t max30205_set_interrupt_mode(max30205_handle_t *handle, max30205_interrup
 /**
  * @brief      get the chip interrupt mode
  * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *mode points to a interrupt mode buffer
+ * @param[out] *mode points to an interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -514,7 +514,7 @@ uint8_t max30205_set_pin_polarity(max30205_handle_t *handle, max30205_pin_polari
 /**
  * @brief      get the interrupt pin polarity
  * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *polarity points to a interrupt pin polarity buffer
+ * @param[out] *polarity points to an interrupt pin polarity buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -539,7 +539,7 @@ uint8_t max30205_set_interrupt_low_threshold(max30205_handle_t *handle, int16_t 
 /**
  * @brief      get the chip interrupt low threshold
  * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *threshold points to a interrupt low threshold buffer
+ * @param[out] *threshold points to an interrupt low threshold buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt low threshold failed
@@ -565,7 +565,7 @@ uint8_t max30205_set_interrupt_high_threshold(max30205_handle_t *handle, int16_t
 /**
  * @brief      get the chip interrupt high threshold
  * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *threshold points to a interrupt high threshold buffer
+ * @param[out] *threshold points to an interrupt high threshold buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt high threshold failed
