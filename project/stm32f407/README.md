@@ -2,57 +2,99 @@
 
 #### 1.1 Chip Info
 
-chip name : STM32F407ZGT6.
+Chip Name: STM32F407ZGT6.
 
-extern oscillator : 8MHz.
+Extern Oscillator: 8MHz.
 
-uart pin: TX/RX PA9/PA10.
+UART Pin: TX/RX PA9/PA10.
 
-iic pin: SCL/SDA PB8/PB9.
+IIC Pin: SCL/SDA PB8/PB9.
 
-gpio pin: INT PB0.
+GPIO Pin: INT PB0.
 
-### 2. Shell
+### 2. Development and Debugging
 
-#### 2.1 Shell Parameter
+#### 2.1 Integrated Development Environment
 
-baud rate: 115200.
+LidDriver provides both Keil and IAR integrated development environment projects.
 
-data bits : 8.
+MDK is the Keil ARM project and your Keil version must be 5 or higher.Keil ARM project needs STMicroelectronics STM32F4 Series Device Family Pack and you can download from https://www.keil.com/dd2/stmicroelectronics/stm32f407zgtx.
 
-stop bits: 1.
+EW is the IAR ARM project and your IAR version must be 9 or higher.
 
-parity: none.
+#### 2.2 Serial Port Parameter
 
-flow control: none.
+Baud Rate: 115200.
+
+Data Bits : 8.
+
+Stop Bits: 1.
+
+Parity: None.
+
+Flow Control: None.
+
+#### 2.3 Serial Port Assistant
+
+We use '\n' to wrap lines.If your serial port assistant displays exceptions (e.g. the displayed content does not divide lines), please modify the configuration of your serial port assistant or replace one that supports '\n' parsing.
 
 ### 3. MAX30205
 
 #### 3.1 Command Instruction
 
-​          max30205 is a basic command which can test all max30205 driver function:
+1. Show max30205 chip and driver information.
 
-​           -i        show max30205 chip and driver information.
+   ```shell
+   max30205 (-i | --information)
+   ```
 
-​           -h       show max30205 help.
+2. Show max30205 help.
 
-​           -p       show max30205 pin connections of the current board.
+   ```shell
+   max30205 (-h | --help)
+   ```
 
-​           -t (reg -a <address>| read <times> -a <address> | int <times> -a <address> -m (INT | CMP) -th <lowthreshold> <highthreshold>)
+3. Show max30205 pin connections of the current board.
 
-​           -t reg -a <address>        run max30205 register test. address means iic address and it can be "00"-"1F".
+   ```shell
+   max30205 (-p | --port)
+   ```
 
-​           -t read <times> -a <address>        run max30205 read test. times means test times. address means iic address and it can be "00"-"1F".
+4. Run max30205 register test, address means iic address and it can be "00"-"1F".
 
-​           -t  int <times> -a <address> -m (INT | CMP) -th <lowthreshold> <highthreshold>        run max30205 interrupt test. times means test times. address means iic address and it can be "00"-"1F". lowthreshold means interrupt low threshold. highthreshold means interrupt high threshold.
+   ```shell
+   max30205 (-t reg | --test=reg) [--addr=<address>]
+   ```
 
-​           -c (read <times> -a <address> | shot <times> -a <address> | int <times> -a <address> -m (INT | CMP) -th <lowthreshold> <highthreshold>)
+5. Run max30205 read test, num means test times, address means iic address and it can be "00"-"1F".
 
-​           -c read <times> -a <address>         run max30205 read function. times means read times. address means iic address and it can be "00"-"1F".
+   ```shell
+   max30205 (-t read | --test=read) [--addr=<address>] [--times=<num>]
+   ```
 
-​           -c shot <times> -a <address>         run max30205 shot function. times means read times. address means iic address and it can be "00"-"1F".
+6. Run max30205 interrupt test, num means test times, address means iic address and it can be "00"-"1F", low means interrupt low threshold, high means interrupt high threshold.
 
-​           -c int <times> -a <address> -m (INT | CMP) -th <lowthreshold> <highthreshold>         run max30205 interrupt function. times means read times. address means iic address and it can be "00"-"1F". lowthreshold means interrupt low threshold. highthreshold means interrupt high threshold.
+   ```shell
+   max30205 (-t int | --test=int) [--addr=<address>] [--times=<num>] [--mode=<INT | CMP>] [--low-threshold=<low>] [--high-threshold=<high>]
+   ```
+
+7. Run max30205 read function, num means read times, address means iic address and it can be "00"-"1F".
+
+   ```shell
+   max30205 (-e read | --example=read) [--addr=<address>] [--times=<num>]
+   ```
+
+8. Run max30205 shot function, num means read times, address means iic address and it can be "00"-"1F".
+
+   ```shell
+   max30205 (-e shot | --example=shot) [--addr=<address>] [--times=<num>]
+   ```
+
+9. Run max30205 interrupt function, num means read times, address means iic address and it can be "00"-"1F", low means interrupt low threshold, high means interrupt high threshold.
+
+   ```shell
+   max30205 (-e int | --example=int) [--addr=<address>] [--times=<num>] [--mode=<INT | CMP>] [--low-threshold=<low>] [--high-threshold=<high>]
+   ```
 
 #### 3.2 Command Example
 
@@ -79,7 +121,7 @@ max30205: OS connected to GPIOB PIN0.
 ```
 
 ```shell
-max30205 -t reg -a 00
+max30205 -t reg --addr=00
 
 max30205: chip is Maxim Integrated MAX30205.
 max30205: manufacturer is Maxim Integrated.
@@ -200,7 +242,7 @@ max30205: finish register test.
 ```
 
 ```shell
-max30205 -t read 3 -a 00
+max30205 -t read --addr=00 --times=3
 
 max30205: chip is Maxim Integrated MAX30205.
 max30205: manufacturer is Maxim Integrated.
@@ -213,26 +255,26 @@ max30205: max temperature is 50.0C.
 max30205: min temperature is 0.0C.
 max30205: start read test.
 max30205: normal read mode test.
-max30205: temperature: 27.5C.
-max30205: temperature: 27.5C.
-max30205: temperature: 27.5C.
+max30205: temperature: 27.7C.
+max30205: temperature: 27.7C.
+max30205: temperature: 27.7C.
 max30205: extended read mode test.
-max30205: temperature: 27.5C.
-max30205: temperature: 27.5C.
-max30205: temperature: 27.5C.
+max30205: temperature: 27.7C.
+max30205: temperature: 27.7C.
+max30205: temperature: 27.7C.
 max30205: single read test.
+max30205: temperature: 27.7C.
 max30205: temperature: 27.6C.
-max30205: temperature: 27.5C.
 max30205: temperature: 27.6C.
 max30205: continuous read test.
-max30205: temperature: 27.6C.
-max30205: temperature: 27.6C.
-max30205: temperature: 27.6C.
+max30205: temperature: 27.7C.
+max30205: temperature: 27.7C.
+max30205: temperature: 27.7C.
 max30205: finished read test.
 ```
 
 ```shell
-max30205 -t int 3 -a 00 -m CMP -th 35.0 39.0
+max30205 -t int --addr=00 --times=3 --mode=CMP --low-threshold=35.0 --high-threshold=39.0
 
 max30205: chip is Maxim Integrated MAX30205.
 max30205: manufacturer is Maxim Integrated.
@@ -244,68 +286,76 @@ max30205: max current is 20.00mA.
 max30205: max temperature is 50.0C.
 max30205: min temperature is 0.0C.
 max30205: start interrupt test.
-max30205: temperature: 28.3C.
+max30205: temperature: 27.5C.
 max30205: 1 temperature is below low threshold, please see os pin.
-max30205: temperature: 28.3C.
+max30205: temperature: 27.5C.
 max30205: 2 temperature is below low threshold, please see os pin.
-max30205: temperature: 28.3C.
+max30205: temperature: 27.5C.
 max30205: 3 temperature is below low threshold, please see os pin.
 max30205: finish interrupt test.
 ```
 
 ```shell
-max30205 -c read 3 -a 00
+max30205 -e read --addr=00 --times=3
 
 max30205: 1/3.
-max30205: temperature is 27.535C.
+max30205: temperature is 27.355C.
 max30205: 2/3.
-max30205: temperature is 27.527C.
+max30205: temperature is 27.367C.
 max30205: 3/3.
-max30205: temperature is 27.555C.
+max30205: temperature is 27.402C.
 ```
 
 ```shell
-max30205 -c shot 3 -a 00
+max30205 -e shot --addr=00 --times=3
 
 max30205: 1/3.
-max30205: temperature is 27.785C.
+max30205: temperature is 27.195C.
 max30205: 2/3.
-max30205: temperature is 27.848C.
+max30205: temperature is 27.199C.
 max30205: 3/3.
-max30205: temperature is 27.852C.
+max30205: temperature is 27.184C.
 ```
 
 ```shell
-max30205 -c int 3 -a 00 -m CMP -th 35.0 39.0
+max30205 -e int --addr=00 --times=3 --mode=CMP --low-threshold=35.0 --high-threshold=39.0
 
 max30205: 1/3.
-max30205: temperature is 27.977C.
+max30205: temperature is 27.207C.
 max30205: 2/3.
-max30205: temperature is 27.988C.
+max30205: temperature is 27.246C.
 max30205: 3/3.
-max30205: temperature is 27.992C.
+max30205: temperature is 27.242C.
 ```
 
 ```shell
 max30205 -h
 
-max30205 -i
-	show max30205 chip and driver information.
-max30205 -h
-	show max30205 help.
-max30205 -p
-	show max30205 pin connections of the current board.
-max30205 -t reg -a <address>
-	run max30205 register test.address means iic address and it can be "00"-"1F".
-max30205 -t read <times> -a <address>
-	run max30205 read test.times means test times.address means iic address and it can be "00"-"1F".
-max30205 -t int <times> -a <address> -m (INT | CMP) -th <lowthreshold> <highthreshold>
-	run max30205 interrupt test.times means test times.address means iic address and it can be "00"-"1F".lowthreshold means interrupt low threshold.highthreshold means interrupt high threshold.
-max30205 -c read <times> -a <address>
-	run max30205 read function.times means read times.address means iic address and it can be "00"-"1F".
-max30205 -c shot <times> -a <address>
-	run max30205 shot function.times means read times.address means iic address and it can be "00"-"1F".
-max30205 -c int <times> -a <address> -m (INT | CMP) -th <lowthreshold> <highthreshold>
-	run max30205 interrupt function.times means read times.address means iic address and it can be "00"-"1F".lowthreshold means interrupt low threshold.highthreshold means interrupt high threshold.
+Usage:
+  max30205 (-i | --information)
+  max30205 (-h | --help)
+  max30205 (-p | --port)
+  max30205 (-t reg | --test=reg) [--addr=<address>]
+  max30205 (-t read | --test=read) [--addr=<address>] [--times=<num>]
+  max30205 (-t int | --test=int) [--addr=<address>] [--times=<num>]
+           [--mode=<INT | CMP>] [--low-threshold=<low>] [--high-threshold=<high>]
+  max30205 (-e read | --example=read) [--addr=<address>] [--times=<num>]
+  max30205 (-e shot | --example=shot) [--addr=<address>] [--times=<num>]
+  max30205 (-e int | --example=int) [--addr=<address>] [--times=<num>]
+           [--mode=<INT | CMP>] [--low-threshold=<low>] [--high-threshold=<high>]
+
+Options:
+      --addr=<address>           Set the addr pin and it can be "00" - "1F".([default: 00])
+  -e <read | shot | int>, --example=<read | shot | int>
+                                 Run the driver example.
+  -h, --help                     Show the help.
+      --high-threshold=<high>    Set the interrupt high threshold.([default: 39.0f])
+  -i, --information              Show the chip information.
+      --low-threshold=<low>      Set the interrupt low threshold.([default: 35.0f])
+      --mode=<INT | CMP>         Set the interrupt mode.([default: CMP])
+  -p, --port                     Display the pin connections of the current board.
+  -t <reg | read | int>, --test=<reg | read | int>
+                                 Run the driver test.
+      --times=<num>              Set the running times.([default: 3])
 ```
 

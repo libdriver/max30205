@@ -305,7 +305,7 @@ uint8_t max30205_set_interrupt_mode(max30205_handle_t *handle, max30205_interrup
 /**
  * @brief      get the chip interrupt mode
  * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *mode points to a interrupt mode buffer
+ * @param[out] *mode points to an interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -425,7 +425,7 @@ uint8_t max30205_set_pin_polarity(max30205_handle_t *handle, max30205_pin_polari
 /**
  * @brief      get the interrupt pin polarity
  * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *polarity points to a interrupt pin polarity buffer
+ * @param[out] *polarity points to an interrupt pin polarity buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -491,7 +491,7 @@ uint8_t max30205_set_bus_timeout(max30205_handle_t *handle, max30205_bus_timeout
 /**
  * @brief      get the iic bus timeout
  * @param[in]  *handle points to a max30205 handle structure
- * @param[out] bus_timeout points to a iic bus timeout buffer
+ * @param[out] bus_timeout points to an iic bus timeout buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -740,7 +740,7 @@ uint8_t max30205_set_interrupt_low_threshold(max30205_handle_t *handle, int16_t 
 /**
  * @brief      get the chip interrupt low threshold
  * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *threshold points to a interrupt low threshold buffer
+ * @param[out] *threshold points to an interrupt low threshold buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt low threshold failed
@@ -814,7 +814,7 @@ uint8_t max30205_set_interrupt_high_threshold(max30205_handle_t *handle, int16_t
 /**
  * @brief      get the chip interrupt high threshold
  * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *threshold points to a interrupt high threshold buffer
+ * @param[out] *threshold points to an interrupt high threshold buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt high threshold failed
