@@ -106,7 +106,7 @@ uint8_t max30205(uint8_t argc, char **argv)
         {"times", required_argument, NULL, 5},
         {NULL, 0, NULL, 0},
     };
-    char type[32] = "unknow";
+    char type[32] = "unknown";
     uint32_t times = 3;
     max30205_address_t addr = MAX30205_ADDRESS_0;
     max30205_interrupt_mode_t mode = MAX30205_INTERRUPT_MODE_COMPARATOR;
@@ -669,7 +669,7 @@ int main(void)
     /* uart init */
     uart_init(115200);
     
-    /* shell init && register max30205 fuction */
+    /* shell init && register max30205 function */
     shell_init();
     shell_register("max30205", max30205);
     uart_print("max30205: welcome to libdriver max30205.\n");
@@ -692,7 +692,7 @@ int main(void)
             }
             else if (res == 2)
             {
-                uart_print("max30205: unknow command.\n");
+                uart_print("max30205: unknown command.\n");
             }
             else if (res == 3)
             {
@@ -708,7 +708,7 @@ int main(void)
             }
             else
             {
-                uart_print("max30205: unknow status code.\n");
+                uart_print("max30205: unknown status code.\n");
             }
             uart_flush();
         }
