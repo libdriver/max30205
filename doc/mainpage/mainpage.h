@@ -1,6 +1,6 @@
 /**
  * @mainpage  LibDriver MAX30205
- * @brief     libdriver max30205 is a full function driver of max30205 and it can run in both MCU and Linux platform.
+ * @brief     LibDriver MAX30205 is a full function driver of MAX30205 and it can run in both MCU and Linux platform.
  * @version   2.0.0
  * @author    Shifeng Li
  *
