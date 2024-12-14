@@ -59,10 +59,10 @@ extern "C"{
 
 /**
  * @brief     interrupt example init
- * @param[in] addr_pin is the iic device address
- * @param[in] mode is the interrupt mode
- * @param[in] low is the interrupt low threshold
- * @param[in] high is the interrupt high threshold
+ * @param[in] addr_pin iic device address
+ * @param[in] mode interrupt mode
+ * @param[in] low interrupt low threshold
+ * @param[in] high interrupt high threshold
  * @return    status code
  *            - 0 success
  *            - 1 init failed
@@ -81,7 +81,7 @@ uint8_t max30205_interrupt_deinit(void);
 
 /**
  * @brief      interrupt example read
- * @param[out] *s points to a converted temperature buffer
+ * @param[out] *s pointer to a converted temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 read failed

@@ -59,7 +59,7 @@
 
 /**
  * @brief     initialize the chip
- * @param[in] *handle points to a max30205 handle structure
+ * @param[in] *handle pointer to a max30205 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 iic initialization failed
@@ -122,7 +122,7 @@ uint8_t max30205_init(max30205_handle_t *handle)
 
 /**
  * @brief     close the chip
- * @param[in] *handle points to a max30205 handle structure
+ * @param[in] *handle pointer to a max30205 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 iic deinit failed
@@ -163,8 +163,8 @@ uint8_t max30205_deinit(max30205_handle_t *handle)
 
 /**
  * @brief     set the iic address pin
- * @param[in] *handle points to a max30205 handle structure
- * @param[in] addr_pin is the chip iic address pin
+ * @param[in] *handle pointer to a max30205 handle structure
+ * @param[in] addr_pin chip iic address pin
  * @return    status code
  *            - 0 success
  *            - 2 handle is NULL
@@ -184,8 +184,8 @@ uint8_t max30205_set_addr_pin(max30205_handle_t *handle, max30205_address_t addr
 
 /**
  * @brief      get the iic address pin
- * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *addr_pin points to a chip iic address pin buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[out] *addr_pin pointer to a chip iic address pin buffer
  * @return      status code
  *              - 0 success
  *              - 2 handle is NULL
@@ -205,8 +205,8 @@ uint8_t max30205_get_addr_pin(max30205_handle_t *handle, max30205_address_t *add
 
 /**
  * @brief     set the chip data format
- * @param[in] *handle points to a max30205 handle structure
- * @param[in] format is the data format
+ * @param[in] *handle pointer to a max30205 handle structure
+ * @param[in] format data format
  * @return    status code
  *            - 0 success
  *            - 2 handle is NULL
@@ -238,8 +238,8 @@ uint8_t max30205_set_data_format(max30205_handle_t *handle, max30205_data_format
 
 /**
  * @brief      get the chip data format
- * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *format points to a data format buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[out] *format pointer to a data format buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -271,8 +271,8 @@ uint8_t max30205_get_data_format(max30205_handle_t *handle, max30205_data_format
 
 /**
  * @brief     set the chip interrupt mode
- * @param[in] *handle points to a max30205 handle structure
- * @param[in] mode is the interrupt mode
+ * @param[in] *handle pointer to a max30205 handle structure
+ * @param[in] mode interrupt mode
  * @return    status code
  *            - 0 success
  *            - 2 handle is NULL
@@ -304,8 +304,8 @@ uint8_t max30205_set_interrupt_mode(max30205_handle_t *handle, max30205_interrup
 
 /**
  * @brief      get the chip interrupt mode
- * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *mode points to an interrupt mode buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[out] *mode pointer to an interrupt mode buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -337,8 +337,8 @@ uint8_t max30205_get_interrupt_mode(max30205_handle_t *handle, max30205_interrup
 
 /**
  * @brief     set the chip fault queue
- * @param[in] *handle points to a max30205 handle structure
- * @param[in] fault_queue is the fault queue
+ * @param[in] *handle pointer to a max30205 handle structure
+ * @param[in] fault_queue fault queue
  * @return    status code
  *            - 0 success
  *            - 2 handle is NULL
@@ -365,8 +365,8 @@ uint8_t max30205_set_fault_queue(max30205_handle_t *handle, max30205_fault_queue
 
 /**
  * @brief      get the chip fault queue
- * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *fault_queue points to a fault queue buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[out] *fault_queue pointer to a fault queue buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -391,8 +391,8 @@ uint8_t max30205_get_fault_queue(max30205_handle_t *handle, max30205_fault_queue
 
 /**
  * @brief     set the interrupt pin polarity
- * @param[in] *handle points to a max30205 handle structure
- * @param[in] polarity is the interrupt pin polarity
+ * @param[in] *handle pointer to a max30205 handle structure
+ * @param[in] polarity interrupt pin polarity
  * @return    status code
  *            - 0 success
  *            - 2 handle is NULL
@@ -424,8 +424,8 @@ uint8_t max30205_set_pin_polarity(max30205_handle_t *handle, max30205_pin_polari
 
 /**
  * @brief      get the interrupt pin polarity
- * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *polarity points to an interrupt pin polarity buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[out] *polarity pointer to an interrupt pin polarity buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -457,8 +457,8 @@ uint8_t max30205_get_pin_polarity(max30205_handle_t *handle, max30205_pin_polari
 
 /**
  * @brief     set the iic bus timeout
- * @param[in] *handle points to a max30205 handle structure
- * @param[in] bus_timeout is the iic bus timeout
+ * @param[in] *handle pointer to a max30205 handle structure
+ * @param[in] bus_timeout iic bus timeout
  * @return    status code
  *            - 0 success
  *            - 2 handle is NULL
@@ -490,8 +490,8 @@ uint8_t max30205_set_bus_timeout(max30205_handle_t *handle, max30205_bus_timeout
 
 /**
  * @brief      get the iic bus timeout
- * @param[in]  *handle points to a max30205 handle structure
- * @param[out] bus_timeout points to an iic bus timeout buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[out] bus_timeout pointer to an iic bus timeout buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -523,7 +523,7 @@ uint8_t max30205_get_bus_timeout(max30205_handle_t *handle, max30205_bus_timeout
 
 /**
  * @brief     start reading data
- * @param[in] *handle points to a max30205 handle structure
+ * @param[in] *handle pointer to a max30205 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 start continuous read failed
@@ -560,7 +560,7 @@ uint8_t max30205_start_continuous_read(max30205_handle_t *handle)
 
 /**
  * @brief     stop reading data
- * @param[in] *handle points to a max30205 handle structure
+ * @param[in] *handle pointer to a max30205 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 stop continuous read failed
@@ -598,9 +598,9 @@ uint8_t max30205_stop_continuous_read(max30205_handle_t *handle)
 
 /**
  * @brief      read data continuously
- * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *raw points to a raw temperature buffer
- * @param[out] *s points to a converted temperature buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[out] *raw pointer to a raw temperature buffer
+ * @param[out] *s pointer to a converted temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 continuous read failed
@@ -645,9 +645,9 @@ uint8_t max30205_continuous_read(max30205_handle_t *handle, int16_t *raw, float 
 
 /**
  * @brief      read data once
- * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *raw points to a raw temperature buffer
- * @param[out] *s points to a converted temperature buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[out] *raw pointer to a raw temperature buffer
+ * @param[out] *s pointer to a converted temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 single read failed
@@ -701,8 +701,8 @@ uint8_t max30205_single_read(max30205_handle_t *handle, int16_t *raw, float *s)
 
 /**
  * @brief     set the chip interrupt low threshold
- * @param[in] *handle points to a max30205 handle structure
- * @param[in] threshold is the interrupt low threshold
+ * @param[in] *handle pointer to a max30205 handle structure
+ * @param[in] threshold interrupt low threshold
  * @return    status code
  *            - 0 success
  *            - 1 set interrupt low threshold failed
@@ -739,8 +739,8 @@ uint8_t max30205_set_interrupt_low_threshold(max30205_handle_t *handle, int16_t 
 
 /**
  * @brief      get the chip interrupt low threshold
- * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *threshold points to an interrupt low threshold buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[out] *threshold pointer to an interrupt low threshold buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt low threshold failed
@@ -775,8 +775,8 @@ uint8_t max30205_get_interrupt_low_threshold(max30205_handle_t *handle, int16_t 
 
 /**
  * @brief     set the chip interrupt high threshold
- * @param[in] *handle points to a max30205 handle structure
- * @param[in] threshold is the interrupt high threshold
+ * @param[in] *handle pointer to a max30205 handle structure
+ * @param[in] threshold interrupt high threshold
  * @return    status code
  *            - 0 success
  *            - 1 set interrupt high threshold failed
@@ -813,8 +813,8 @@ uint8_t max30205_set_interrupt_high_threshold(max30205_handle_t *handle, int16_t
 
 /**
  * @brief      get the chip interrupt high threshold
- * @param[in]  *handle points to a max30205 handle structure
- * @param[out] *threshold points to an interrupt high threshold buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[out] *threshold pointer to an interrupt high threshold buffer
  * @return     status code
  *             - 0 success
  *             - 1 get interrupt high threshold failed
@@ -849,9 +849,9 @@ uint8_t max30205_get_interrupt_high_threshold(max30205_handle_t *handle, int16_t
 
 /**
  * @brief      convert a temperature value to a register raw data
- * @param[in]  *handle points to a max30205 handle structure
- * @param[in]  s is a converted temperature value
- * @param[out] *reg points to a register raw buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[in]  s converted temperature value
+ * @param[out] *reg pointer to a register raw buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
@@ -883,9 +883,9 @@ uint8_t max30205_convert_to_register(max30205_handle_t *handle, float s, int16_t
 
 /**
  * @brief      convert a register raw data to a converted temperature data
- * @param[in]  *handle points to a max30205 handle structure
- * @param[in]  reg is the register raw data
- * @param[out] *s points to a converted temperature value buffer
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[in]  reg register raw data
+ * @param[out] *s pointer to a converted temperature value buffer
  * @return     status code
  *             - 0 success
  *             - 1 convert to data failed
@@ -918,7 +918,7 @@ uint8_t max30205_convert_to_data(max30205_handle_t *handle, int16_t reg, float *
 
 /**
  * @brief     chip powers down
- * @param[in] *handle points to a max30205 handle structure
+ * @param[in] *handle pointer to a max30205 handle structure
  * @return    status code
  *            - 0 success
  *            - 1 power down failed
@@ -954,10 +954,10 @@ uint8_t max30205_power_down(max30205_handle_t *handle)
 
 /**
  * @brief     set the chip register
- * @param[in] *handle points to a max30205 handle structure
- * @param[in] reg is the iic register address
- * @param[in] *buf points to a data buffer
- * @param[in] len is the data buffer length
+ * @param[in] *handle pointer to a max30205 handle structure
+ * @param[in] reg iic register address
+ * @param[in] *buf pointer to a data buffer
+ * @param[in] len data buffer length
  * @return    status code
  *            - 0 success
  *            - 1 write failed
@@ -990,10 +990,10 @@ uint8_t max30205_set_reg(max30205_handle_t *handle, uint8_t reg, uint8_t *buf, u
 
 /**
  * @brief      get the chip register
- * @param[in]  *handle points to a max30205 handle structure
- * @param[in]  reg is the iic register address
- * @param[out] *buf points to a data buffer
- * @param[in]  len is the data buffer length
+ * @param[in]  *handle pointer to a max30205 handle structure
+ * @param[in]  reg iic register address
+ * @param[out] *buf pointer to a data buffer
+ * @param[in]  len data buffer length
  * @return     status code
  *             - 0 success
  *             - 1 read failed
@@ -1026,7 +1026,7 @@ uint8_t max30205_get_reg(max30205_handle_t *handle, uint8_t reg, uint8_t *buf, u
 
 /**
  * @brief      get chip's information
- * @param[out] *info points to a max30205 info structure
+ * @param[out] *info pointer to a max30205 info structure
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
