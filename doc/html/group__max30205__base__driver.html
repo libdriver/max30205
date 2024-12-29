@@ -421,9 +421,9 @@ Functions</h2></td></tr>
 <p>read data continuously </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*raw</td><td>points to a raw temperature buffer </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*s</td><td>points to a converted temperature buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*raw</td><td>pointer to a raw temperature buffer </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*s</td><td>pointer to a converted temperature buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -459,7 +459,7 @@ Functions</h2></td></tr>
 <p>close the chip </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
   </table>
   </dd>
 </dl>
@@ -505,8 +505,8 @@ Functions</h2></td></tr>
 <p>get the iic address pin </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*addr_pin</td><td>points to a chip iic address pin buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*addr_pin</td><td>pointer to a chip iic address pin buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -550,8 +550,8 @@ Functions</h2></td></tr>
 <p>get the iic bus timeout </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">bus_timeout</td><td>points to an iic bus timeout buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">bus_timeout</td><td>pointer to an iic bus timeout buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -596,8 +596,8 @@ Functions</h2></td></tr>
 <p>get the chip data format </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*format</td><td>points to a data format buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*format</td><td>pointer to a data format buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -632,7 +632,7 @@ Functions</h2></td></tr>
 <p>get chip's information </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">*info</td><td>points to a max30205 info structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*info</td><td>pointer to a max30205 info structure </td></tr>
   </table>
   </dd>
 </dl>
@@ -666,7 +666,7 @@ Functions</h2></td></tr>
 <p>initialize the chip </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
   </table>
   </dd>
 </dl>
@@ -702,7 +702,7 @@ Functions</h2></td></tr>
 <p>chip powers down </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
   </table>
   </dd>
 </dl>
@@ -748,8 +748,8 @@ Functions</h2></td></tr>
 <p>set the iic address pin </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">addr_pin</td><td>is the chip iic address pin </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">addr_pin</td><td>chip iic address pin </td></tr>
   </table>
   </dd>
 </dl>
@@ -793,8 +793,8 @@ Functions</h2></td></tr>
 <p>set the iic bus timeout </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">bus_timeout</td><td>is the iic bus timeout </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">bus_timeout</td><td>iic bus timeout </td></tr>
   </table>
   </dd>
 </dl>
@@ -839,8 +839,8 @@ Functions</h2></td></tr>
 <p>set the chip data format </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">format</td><td>is the data format </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">format</td><td>data format </td></tr>
   </table>
   </dd>
 </dl>
@@ -891,9 +891,9 @@ Functions</h2></td></tr>
 <p>read data once </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*raw</td><td>points to a raw temperature buffer </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*s</td><td>points to a converted temperature buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*raw</td><td>pointer to a raw temperature buffer </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*s</td><td>pointer to a converted temperature buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -929,7 +929,7 @@ Functions</h2></td></tr>
 <p>start reading data </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
   </table>
   </dd>
 </dl>
@@ -965,7 +965,7 @@ Functions</h2></td></tr>
 <p>stop reading data </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
   </table>
   </dd>
 </dl>

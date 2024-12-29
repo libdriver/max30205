@@ -269,9 +269,9 @@ Functions</h2></td></tr>
 <p>convert a register raw data to a converted temperature data </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">reg</td><td>is the register raw data </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*s</td><td>points to a converted temperature value buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">reg</td><td>register raw data </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*s</td><td>pointer to a converted temperature value buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -323,9 +323,9 @@ Functions</h2></td></tr>
 <p>convert a temperature value to a register raw data </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>is a converted temperature value </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*reg</td><td>points to a register raw buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>converted temperature value </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*reg</td><td>pointer to a register raw buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -370,8 +370,8 @@ Functions</h2></td></tr>
 <p>get the chip fault queue </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*fault_queue</td><td>points to a fault queue buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*fault_queue</td><td>pointer to a fault queue buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -416,8 +416,8 @@ Functions</h2></td></tr>
 <p>get the chip interrupt high threshold </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*threshold</td><td>points to an interrupt high threshold buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*threshold</td><td>pointer to an interrupt high threshold buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -463,8 +463,8 @@ Functions</h2></td></tr>
 <p>get the chip interrupt low threshold </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*threshold</td><td>points to an interrupt low threshold buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*threshold</td><td>pointer to an interrupt low threshold buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -510,8 +510,8 @@ Functions</h2></td></tr>
 <p>get the chip interrupt mode </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*mode</td><td>points to an interrupt mode buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*mode</td><td>pointer to an interrupt mode buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -556,8 +556,8 @@ Functions</h2></td></tr>
 <p>get the interrupt pin polarity </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">*polarity</td><td>points to an interrupt pin polarity buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">*polarity</td><td>pointer to an interrupt pin polarity buffer </td></tr>
   </table>
   </dd>
 </dl>
@@ -602,8 +602,8 @@ Functions</h2></td></tr>
 <p>set the chip fault queue </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">fault_queue</td><td>is the fault queue </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">fault_queue</td><td>fault queue </td></tr>
   </table>
   </dd>
 </dl>
@@ -648,8 +648,8 @@ Functions</h2></td></tr>
 <p>set the chip interrupt high threshold </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">threshold</td><td>is the interrupt high threshold </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">threshold</td><td>interrupt high threshold </td></tr>
   </table>
   </dd>
 </dl>
@@ -695,8 +695,8 @@ Functions</h2></td></tr>
 <p>set the chip interrupt low threshold </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">threshold</td><td>is the interrupt low threshold </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">threshold</td><td>interrupt low threshold </td></tr>
   </table>
   </dd>
 </dl>
@@ -742,8 +742,8 @@ Functions</h2></td></tr>
 <p>set the chip interrupt mode </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>is the interrupt mode </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>interrupt mode </td></tr>
   </table>
   </dd>
 </dl>
@@ -788,8 +788,8 @@ Functions</h2></td></tr>
 <p>set the interrupt pin polarity </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>points to a max30205 handle structure </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">polarity</td><td>is the interrupt pin polarity </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">*handle</td><td>pointer to a max30205 handle structure </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">polarity</td><td>interrupt pin polarity </td></tr>
   </table>
   </dd>
 </dl>

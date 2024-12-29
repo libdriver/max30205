@@ -64,7 +64,7 @@ extern "C"{
 
 /**
  * @brief     basic example init
- * @param[in] addr_pin is the iic device address
+ * @param[in] addr_pin iic device address
  * @return    status code
  *            - 0 success
  *            - 1 init failed
@@ -83,7 +83,7 @@ uint8_t max30205_basic_deinit(void);
 
 /**
  * @brief      basic example read
- * @param[out] *s points to a converted temperature buffer
+ * @param[out] *s pointer to a converted temperature buffer
  * @return     status code
  *             - 0 success
  *             - 1 read failed
