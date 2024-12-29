@@ -419,7 +419,7 @@ uint8_t max30205_set_bus_timeout(max30205_handle_t *handle, max30205_bus_timeout
 /**
  * @brief      get the iic bus timeout
  * @param[in]  *handle pointer to a max30205 handle structure
- * @param[out] bus_timeout pointer to an iic bus timeout buffer
+ * @param[out] *bus_timeout pointer to an iic bus timeout buffer
  * @return     status code
  *             - 0 success
  *             - 2 handle is NULL
