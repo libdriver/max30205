@@ -10,7 +10,7 @@
 
 The MAX30205 temperature sensor accurately measures temperature and provide an over temperature alarm/interrupt/shutdown output. This device converts the temperature measurements to digital form using a high resolution, sigma-delta, analog-to-digital converter (ADC).Accuracy meets clinical thermometry specification of the ASTM E1112 when soldered on the final PCB. Communication is through an I2C-compatible, 2-wire serial interface. The I2C serial interface accepts standard write byte, read byte, send byte, and receive byte commands to read the temperature data and configure the behavior of the open drain over temperature shutdown output. The MAX30205 features three address select lines with a total of 32 available addresses. The sensor has a 2.7V to 3.3V supply voltage range, low 600μA supply current, and a lockup-protected I2C-compatible interface that make it ideal for wearable fitness and medical applications. This device is available in an 8-pin TDFN package and operates over the 0NC to +50NC temperature range. MAX30205 is used in fitness and medical treatment.
 
-LibDriver MAX30205 is a full-featured driver of MAX30205 launched by LibDriver. It provides continuous temperature reading, single temperature reading and temperature interrupt functions. LibDriver is MISRA compliant.
+LibDriver MAX30205 is a full-featured driver for MAX30205, launched by LibDriver. It provides continuous reading, single reading, temperature interrupt and additional features. LibDriver is MISRA compliant.
 
 ### Table of Contents
 
