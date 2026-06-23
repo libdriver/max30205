@@ -678,6 +678,7 @@ uint8_t max30205_single_read(max30205_handle_t *handle, int16_t *raw, float *s)
         return 1;                                                                          /* return error */
     }
     handle->delay_ms(50);                                                                  /* delay 50 ms */
+    handle->reg &= ~(1 << 7);                                                              /* clear shot bit */
     memset(buf, 0, sizeof(uint8_t) * 2);                                                   /* clear the buffer */
     if (handle->iic_read(handle->iic_addr, MAX30205_REG_TEMP, (uint8_t *)buf, 2) != 0)     /* read two bytes */
     {
