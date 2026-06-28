@@ -85,7 +85,7 @@ typedef enum
     MAX30205_ADDRESS_14 = (uint8_t)(0x9C),        /**< A2 = VDD, A1 = VDD, A0 = GND */
     MAX30205_ADDRESS_15 = (uint8_t)(0x9E),        /**< A2 = VDD, A1 = VDD, A0 = VDD */
     MAX30205_ADDRESS_16 = (uint8_t)(0x8E),        /**< A2 = VDD, A1 = VDD, A0 = SCL */
-    MAX30205_ADDRESS_17 = (uint8_t)(0x8C),        /**< A2 = VDD, A1 = GND, A0 = SDA */
+    MAX30205_ADDRESS_17 = (uint8_t)(0x8C),        /**< A2 = VDD, A1 = VDD, A0 = SDA */
     MAX30205_ADDRESS_18 = (uint8_t)(0xBC),        /**< A2 = VDD, A1 = SCL, A0 = GND */
     MAX30205_ADDRESS_19 = (uint8_t)(0xBE),        /**< A2 = VDD, A1 = SCL, A0 = VDD */
     MAX30205_ADDRESS_1A = (uint8_t)(0xAE),        /**< A2 = VDD, A1 = SCL, A0 = SCL */
