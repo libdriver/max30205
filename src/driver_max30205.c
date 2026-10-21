@@ -582,7 +582,6 @@ uint8_t max30205_stop_continuous_read(max30205_handle_t *handle)
     }
     
     reg = handle->reg | (1 << 0);                                                             /* enter shutdown mode */
-    reg = reg | (1 << 7);                                                                     /* set continuous read bit */
     
     if (handle->iic_write(handle->iic_addr, MAX30205_REG_CONF, (uint8_t *)&reg, 1) != 0)      /* write conf register */
     {
@@ -1047,8 +1046,8 @@ uint8_t max30205_info(max30205_info_t *info)
     info->supply_voltage_min_v = SUPPLY_VOLTAGE_MIN;                /* set minimal supply voltage */
     info->supply_voltage_max_v = SUPPLY_VOLTAGE_MAX;                /* set maximum supply voltage */
     info->max_current_ma = MAX_CURRENT;                             /* set maximum current */
-    info->temperature_max = TEMPERATURE_MAX;                        /* set minimal temperature */
-    info->temperature_min = TEMPERATURE_MIN;                        /* set maximum temperature */
+    info->temperature_max = TEMPERATURE_MAX;                        /* set maximum temperature */
+    info->temperature_min = TEMPERATURE_MIN;                        /* set minimal temperature */
     info->driver_version = DRIVER_VERSION;                          /* set driver version */
     
     return 0;                                                       /* success return 0 */
